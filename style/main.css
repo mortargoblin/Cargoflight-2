@@ -15,16 +15,28 @@ body {
     width: 100%;
 }
 
+#top {
+  width: 100%;
+  height: 60px;
+}
+
+
 #left {
+  width: 300px;
+}
+
+
+#middle {
   width: 100%;
 }
 #map {
     width: 100%;
-    height: 100vh;
+    height: 90vh;
+    border: ridge 10px grey;
+    border-radius: 30px;
 }
 
 
 #right {
-  width: 400px;
-  background-color: grey;
+  width: 500px;
 }
