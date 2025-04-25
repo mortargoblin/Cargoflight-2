@@ -1,7 +1,7 @@
 //import defaultExport from './leaflet.js';
 
 // Map initialization
-  const map = L.map('map').setView([50.073658, 14.418540], 4);
+  const map = L.map('map', {attributionControl:false}).setView([50.073658, 14.418540], 4);
 
   // stadia background layer
   const stadia_bg = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.{ext}', {
