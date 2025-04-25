@@ -46,6 +46,7 @@ body {
 }
 #left {
     width: 300px;
+    flex-shrink: 0;
 }
 
 
@@ -55,11 +56,18 @@ body {
 #map {
     width: 100%;
     height: calc(100% - 40px);
+    width: calc(100% - 20px);
     border: ridge 10px grey;
     border-radius: 50px;
 }
 
 
 #right {
-  width: 500px;
+  width: 450px;
+  flex-shrink: 0;
+  text-align: center;
+}
+#plane-img {
+  border-radius: 50px;
+  width: 80%;
 }
