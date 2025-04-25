@@ -5,7 +5,7 @@
 const map = L.map('map', {
   attributionControl: false,
   zoomControl: false
-}).setView([50.073658, 14.418540], 4);
+}).setView([58, 14.418540], 4);
 
 // stadia background layer
 const stadia_bg = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.{ext}', {
