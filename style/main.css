@@ -44,14 +44,16 @@ body {
   margin-top: 5px;
   font-size: 25px;
 }
+
+/*This is the left side of the game*/
 #left {
-    width: 300px;
+    width: 20%;
     flex-shrink: 0;
 }
 
-
+/*This is the middle of the game*/
 #middle {
-    width: 100%;
+    width: 50%;
 }
 #map {
     width: 100%;
@@ -62,12 +64,44 @@ body {
 }
 
 
+/* Here starts right side about the game */
+
 #right {
-  width: 450px;
+  width: 30%;
   flex-shrink: 0;
   text-align: center;
 }
+#img_place {
+    width: auto;
+    text-align: right;
+    margin-right: 30px;
+}
+
 #plane-img {
-  border-radius: 50px;
-  width: 80%;
+    display: inline-block;
+  border-radius: 20px;
+  width: 20%;
+    border: ridge 10px grey;
+
+}
+
+#stats {
+    background-color: #5a5c5e;
+    margin: 1rem auto;
+    width: 80%;
+    border-radius: 20px;
+    padding: 12px 6px;
+    border: ridge 10px grey;
+
+}
+
+.stats_heading {
+    text-decoration: underline;
+}
+
+.stats_list {
+    display: block;
+    list-style: none;
+    text-align: center;
+    padding-inline-start: 0;
 }
