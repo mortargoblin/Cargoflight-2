@@ -19,29 +19,40 @@
 <body>
   <div class="container">
     <div id="top">
-      <div id="top-title">
+      <div class="top-item">
         <h1>Cargo Flight 2</h1>
+      </div>
+      <div class="top-item">
+        <h1 id="company-name">company name</h1>
       </div>
     </div>
     <div class="flex-container">
       <div id="left">
-        <div>
+        <div id="destinations" class="ridged">
+          <h2>Destinations</h2>
         </div>
+        <ul id="destination-list">
+        </ul>
       </div>
       <div id="middle">
-        <div id="map"></div>
+        <div id="map" class="ridged"></div>
       </div>
       <div id="right">
-        <div id="img_place">
+        <div id="img-container" class="ridged">
           <img id="plane-img" src="img/plane-placeholder.png">
         </div>
-        <div id="stats">
-          <h2 class="stats_heading">Here is some stats and also this will be Your Companys name</h2>
-          <ul class="stats_list">
+        <div id="stats" class="ridged">
+          <h2>Here is some stats and also this will be Your Companys name</h2>
+          <ul>
             <li>somthing1</li>
             <li>somthing2</li>
           </ul>
         </div>
+        <div id="buttons">
+          <button id="upgrade">upgrade</button>
+          <button>something</button>
+        </div>
+        <div id="fuel" class="ridged">gauge</div>
       </div>
     </div>
   </div>

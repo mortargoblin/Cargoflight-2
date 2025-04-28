@@ -11,6 +11,19 @@ body {
 
 }
 
+button {
+    border-radius: 40%;
+    width: 80px;
+    height: 80px;
+    border: outset 13px grey;
+}
+
+.ridged {
+
+    border: ridge 10px grey;
+    border-radius: 20px;
+}
+
 .container {
     height: 100vh;
     display: flex;
@@ -26,20 +39,21 @@ body {
 #top {
     display: flex;
     justify-content: center;
-    
+
     width: 100%;
     height: 60px;
+    margin-bottom: 5px;
 }
-#top-title {
+.top-item {
     background-color: black;
     text-align: center;
     border: ridge 10px grey;
     border-radius: 20px;
-    margin: auto;
     width: 400px;
     height: 37px;
+    margin: 3px 5px;
 }
-#top-title > h1 {
+.top-item > h1 {
   margin: 0px;
   margin-top: 5px;
   font-size: 25px;
@@ -50,6 +64,12 @@ body {
     width: 20%;
     flex-shrink: 0;
 }
+#destinations {
+    text-align: center;
+    background-color: black;
+    height: 600px;
+}
+
 
 /*This is the middle of the game*/
 #middle {
@@ -59,7 +79,6 @@ body {
     width: 100%;
     height: calc(100% - 40px);
     width: calc(100% - 20px);
-    border: ridge 10px grey;
     border-radius: 50px;
 }
 
@@ -67,41 +86,42 @@ body {
 /* Here starts right side about the game */
 
 #right {
-  width: 30%;
-  flex-shrink: 0;
-  text-align: center;
+    width: 30%;
+    flex-shrink: 0;
+    text-align: center;
+    margin: 0px 10px;
 }
-#img_place {
-    width: auto;
-    text-align: right;
-    margin-right: 30px;
+#img-container {
+    background-color: black;
+    border-radius: 20px;
+    width: 200px;
+
 }
 
 #plane-img {
-    display: inline-block;
-  border-radius: 20px;
-  width: 20%;
-    border: ridge 10px grey;
-
+    width: 100%;
 }
 
 #stats {
     background-color: #5a5c5e;
-    margin: 1rem auto;
-    width: 80%;
-    border-radius: 20px;
     padding: 12px 6px;
-    border: ridge 10px grey;
-
+    margin: 10px 0px;
 }
 
-.stats_heading {
+#stats > h2 {
     text-decoration: underline;
 }
 
-.stats_list {
+#stats > ul {
     display: block;
     list-style: none;
     text-align: center;
     padding-inline-start: 0;
+}
+
+#fuel {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: black;
 }
