@@ -4,6 +4,7 @@ from flask import Flask, request, Response
 import mysql.connector
 
 import random
+import json
 from geopy import distance
 
 
@@ -89,14 +90,17 @@ def find_ports():
                 "type": pool_current[2],
                 "iso_country": pool_current[3],
                 "lat": pool_current[4],
-                "long": pool_current[5],})
+                "long": pool_current[5],
+            })
+            
+            status = 200
+
         except IndexError as ie:
             # Jos kenttiä ei ole riittävästi palautetaan False
             if i + 1 == valvara:
                 
-                # TODO: BETTER ERRORHANDLING HERE
-
-                return ie
+                tulos = "Too few airports"
+                status = 418
 
             else:
                 # Kumminkin jos kenttiä on tarpeeksi, mutta ei valinnanvaran
@@ -104,7 +108,11 @@ def find_ports():
                 # tule debuffia.
                 pass
             
-    return str(tulos)
+    return Response(
+        response=json.dumps(tulos),
+        status=status,
+        mimetype="application/json"
+    )
 
 
 
