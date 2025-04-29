@@ -6,9 +6,8 @@ body {
     font-family: "Courier New", monospace;
     color: white;
 
-    background: #5a5c5e;
-    background: linear-gradient(90deg, rgba(90, 92, 94, 1) 0%, rgba(105, 107, 111, 1) 29%, rgba(180, 182, 194, 1) 51%, rgba(75, 75, 79, 1) 74%, rgba(53, 53, 56, 1) 100%);
-
+    background: #141414;
+    background: linear-gradient(90deg,rgba(20, 20, 20, 1) 0%, rgba(48, 48, 48, 1) 32%, rgba(144, 149, 163, 1) 51%, rgba(31, 31, 33, 1) 67%, rgba(18, 18, 18, 1) 100%);
 }
 
 button {
@@ -61,8 +60,9 @@ button {
 
 /*This is the left side of the game*/
 #left {
-    width: 20%;
+    width: 300px;
     flex-shrink: 0;
+    margin: 0px 10px;
 }
 #destinations {
     text-align: center;
@@ -73,7 +73,7 @@ button {
 
 /*This is the middle of the game*/
 #middle {
-    width: 50%;
+    flex-grow: 1;
 }
 #map {
     width: 100%;
@@ -86,7 +86,7 @@ button {
 /* Here starts right side about the game */
 
 #right {
-    width: 30%;
+    width: 400px;
     flex-shrink: 0;
     text-align: center;
     margin: 0px 10px;
