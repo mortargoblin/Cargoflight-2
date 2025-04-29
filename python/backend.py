@@ -14,7 +14,7 @@ def find_ports():
     ## TEMPORARY PLANE MODEL
     lentokone_di = {
         "tyyppi": "Lilla Damen 22",
-        "kantama": 300,
+        "kantama": 600,
         "kerroin": 1,
         "hinta": 0,
         "valinnanvara": 4
@@ -93,7 +93,11 @@ def find_ports():
         except IndexError as ie:
             # Jos kenttiä ei ole riittävästi palautetaan False
             if i + 1 == valvara:
-                return str("False")
+                
+                # TODO: BETTER ERRORHANDLING HERE
+
+                return ie
+
             else:
                 # Kumminkin jos kenttiä on tarpeeksi, mutta ei valinnanvaran
                 # verran, palautetaan vajaa lista. Näin valinnanvarasta ei
