@@ -31,7 +31,7 @@ def find_ports():
     yhteys = mysql.connector.connect (
         host='127.0.0.1',
         port= 3306,
-        database='rahtipeli',
+        database='cargoflight',
         user='pythonuser',  # HUOM käyttäjä: pythonuser
         password='salainen-sana',  #HUOM salasana
         autocommit=True,
@@ -49,7 +49,9 @@ def find_ports():
                 " longitude_deg FROM airport WHERE type='large_airport'")
     else:
         sql = (f"SELECT ident, name, type, iso_country, latitude_deg,"
-                " longitude_deg FROM airport WHERE NOT type='small_airport'")
+                " longitude_deg FROM airport WHERE NOT type='small_airport'"
+                " AND NOT type='heliport' AND NOT type='closed'"
+                " AND NOT type='seaplane_base'")
     kursori.execute(sql)
     airports = kursori.fetchall()
 
