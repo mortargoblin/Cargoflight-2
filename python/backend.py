@@ -113,7 +113,58 @@ def find_ports():
         status=status,
         mimetype="application/json"
     )
+@app.route("/upgrade_airplane_md")
 
+def upgrade_airplane_md():
+    money = 20000000
+
+    airplane_di = {
+        "tyyppi": "Lilla Damen 22",
+        "kantama": 600,
+        "kerroin": 1,
+        "hinta": 0,
+        "valinnanvara": 4
+    }
+
+
+    yhteys = mysql.connector.connect(
+        host='127.0.0.1',
+        port=3306,
+        database='flight_game',
+        user='pythonuser',  # HUOM käyttäjä: pythonuser
+        password='salainen-sana',  # HUOM salasana
+        autocommit=True,
+        collation='utf8mb3_general_ci'
+    )
+    kursori = yhteys.cursor()
+
+
+    sql = f"select type, distance, selection, price, factor from airplane where id = '{2}'"
+    kursori.execute(sql)
+    tiedot = kursori.fetchall()
+    try:
+        for arvo in tiedot:
+            if money >= float(arvo[3]):
+                if airplane_di["tyyppi"] != arvo[0]:
+                    paivitys = {
+                        "tyyppi": arvo[0],
+                        "kantama": arvo[1],
+                        "valinnanvara": arvo[2],
+                        "hinta": arvo[3],
+                        "kerroin": arvo[4]
+                    }
+                    vahennys = money - float(arvo[3])
+                    airplane_di = paivitys
+                    status = 200
+                    jsonvast = json.dumps(airplane_di)
+
+    except ValueError as i:
+        vahennys = money
+        status = 400
+        jsonvast = "You already have this type of plain"
+
+
+    return Response(response = jsonvast, status=status, mimetype="application/json")
 
 
 

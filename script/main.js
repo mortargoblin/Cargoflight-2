@@ -10,6 +10,19 @@ let nextTurn = true;
 const upgradeEvent = 
 `<div id="event-window"> <h2>upgrade</h2> <ol><li>plane</li><li>plane</li></ol> </div>`
 
+let airplane_ar = {
+    "tyyppi": "Lilla Damen 22",
+    "kantama": 300,
+    "kerroin": 1,
+    "hinta": 0,
+    "valinnanvara" : 4
+    }
+let money = 2000
+
+async function upgrade_airplane(airplane_ar, money){
+
+
+}
 
 
 // findPorts function
