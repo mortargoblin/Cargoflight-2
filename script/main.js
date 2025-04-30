@@ -27,8 +27,8 @@ async function findPorts(dir) {
 
 function markMap() {
   for (let i = 0; i < airports.length; i++) {
-    L.marker([airports[i][lat], airports[i][lon]]).addTo(map)
-  .bindPopup(airports[i][ident])
+    L.marker([airports[i]["lat"], airports[i]["lon"]]).addTo(map)
+  .bindPopup(airports[i]["ident"])
   .openPopup();
   }
 }
