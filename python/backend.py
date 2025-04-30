@@ -1,6 +1,6 @@
 # backend.py
 
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 import mysql.connector
 
 import random
@@ -113,10 +113,13 @@ def find_ports():
         status=status,
         mimetype="application/json"
     )
+
+
+#upgrade plane
 @app.route("/upgrade_airplane_md")
 
 def upgrade_airplane_md():
-    money = 20000000
+    money = 2000
 
     airplane_di = {
         "tyyppi": "Lilla Damen 22",
@@ -141,30 +144,42 @@ def upgrade_airplane_md():
 
     sql = f"select type, distance, selection, price, factor from airplane where id = '{2}'"
     kursori.execute(sql)
-    tiedot = kursori.fetchall()
+    information = kursori.fetchall()
+
     try:
-        for arvo in tiedot:
-            if money >= float(arvo[3]):
-                if airplane_di["tyyppi"] != arvo[0]:
+        for value in information:
+            if money >= float(value[3]):
+                if airplane_di["tyyppi"] != value[0]:
                     paivitys = {
-                        "tyyppi": arvo[0],
-                        "kantama": arvo[1],
-                        "valinnanvara": arvo[2],
-                        "hinta": arvo[3],
-                        "kerroin": arvo[4]
+                        "tyyppi": value[0],
+                        "kantama": value[1],
+                        "valinnanvara": value[2],
+                        "hinta": value[3],
+                        "kerroin": value[4]
                     }
-                    vahennys = money - float(arvo[3])
+                    vahennys = money - float(value[3])
                     airplane_di = paivitys
                     status = 200
-                    jsonvast = json.dumps(airplane_di)
 
-    except ValueError as i:
-        vahennys = money
+
+                return jsonify({"airplane_di": airplane_di, "money_remaining": vahennys}), status
+
+        #If you don't have enough money, or you already have this type of plane
         status = 400
-        jsonvast = "You already have this type of plain"
+        return jsonify({
+            "error": "You already have this type of airplane or not enough money",
+            "money_remaining": money
+        }), status
 
+    #If upgrade value is wrong
+    except ValueError:
 
-    return Response(response = jsonvast, status=status, mimetype="application/json")
+        status = 400
+        return jsonify({
+            "error": "Wrong data or value",
+            "money_remaining": money
+        }), status
+
 
 
 
