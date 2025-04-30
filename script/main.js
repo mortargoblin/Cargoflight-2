@@ -24,6 +24,16 @@ async function findPorts(dir) {
       += `<li id="port-${i}">${airports[i]["ident"]} .. ${airports[i]["name"]}</li>`
   }
 }
+
+function markMap() {
+  for (let i = 0; i < airports.length; i++) {
+    L.marker([airports[i][lat], airports[i][lon]]).addTo(map)
+  .bindPopup(airports[i][ident])
+  .openPopup();
+  }
+}
+
+
 // Show overlayed windows. events, menus, etc.
 function eventWindow(event) {
   document.querySelector('#event-container').style.display = 'block';

@@ -16,9 +16,4 @@ const stadia_bg = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_b
 });
 stadia_bg.addTo(map)
 
-/*
-L.marker([50.073658, 14.418540]).addTo(map)
-  .bindPopup('Praha.<br> nice')
-  .openPopup();
-*/
 
