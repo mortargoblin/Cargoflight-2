@@ -1,13 +1,21 @@
 // MAIN.JS
 
-// update destination-list
-// (by clicking upgrade button, temporary)
 
-const upgrade = document.querySelector('#upgrade');
+const upgradeButton = document.querySelector('#upgrade');
 const destinationList = document.querySelector('#destination-list');
 
-upgrade.addEventListener('click', async function(evt) {
-  let airports = await fetch('http://localhost:3000/find-ports?location=efhk&direction=E');
+let nextTurn = true;
+
+// EVENTS
+const upgradeEvent = 
+`<div id="event-window"> <h2>upgrade</h2> <ol><li>plane</li><li>plane</li></ol> </div>`
+
+
+
+// findPorts function
+// update destination-list
+async function findPorts(dir) {
+  let airports = await fetch(`http://localhost:3000/find-ports?location=efhk&direction=${dir}`);
   airports = await airports.json();
   console.log(airports);
   destinationList.innerHTML = '';
@@ -15,4 +23,30 @@ upgrade.addEventListener('click', async function(evt) {
     destinationList.innerHTML 
       += `<li id="port-${i}">${airports[i]["ident"]} .. ${airports[i]["name"]}</li>`
   }
+}
+// Show overlayed windows. events, menus, etc.
+function eventWindow(event) {
+  document.querySelector('#event-container').style.display = 'block';
+  document.querySelector('#map').style.display = 'none';
+  document.querySelector('#event-container').innerHTML = event;
+}
+
+
+// BUTTONS
+upgradeButton.addEventListener('click', function(evt) {
+    eventWindow(upgradeEvent);
+});
+
+// KEYBINDS
+document.addEventListener('keydown', async function(evt) {
+  console.log(evt.key);
+  
+  // findPorts(dire2ction) triggered on arrow keydown
+  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(evt.key) && nextTurn) {
+    if (evt.key === 'ArrowUp') {findPorts('N')}
+    if (evt.key === 'ArrowDown') {findPorts('S')}
+    if (evt.key === 'ArrowLeft') {findPorts('W')}
+    if (evt.key === 'ArrowRight') {findPorts('E')}
+  }
+
 });
