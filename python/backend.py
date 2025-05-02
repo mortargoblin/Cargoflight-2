@@ -125,6 +125,7 @@ def find_ports():
 def upgrade_airplane_md(value):
     data = request.get_json()
     value = float(value)
+    money = data['money']
 
     airplane_ar = data['airplane_ar']
 
@@ -173,17 +174,7 @@ def upgrade_airplane_md(value):
                     }
                     status = 200
                     return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
-                else:
-                    message = "You don't have enough money"
-                    status = 400
-                    return Response(response=json.dumps(message), status=status, mimetype="application/json")
-
-            else:
-                message = {"text":"You already have this type of airplane"}
-                status = 400
-
-                return Response(response=json.dumps(message), status=status, mimetype="application/json")
-
+            
 
         #If you don't have enough money, or you already have this type of plane
         status = 400
