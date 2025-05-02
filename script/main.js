@@ -9,12 +9,17 @@ let nextTurn = true;
 
 // EVENTS
 const upgradeEvent = 
-`<div id="event-window"> <h2>upgrade</h2> <ol><li>plane</li><li>plane</li></ol> </div>`
+`<div id="event-window"> <h2>Upgrade your airplane</h2> <ol class="planes">
+<li class="plane1">plane1</li>
+<li class="plane2">plane2</li>
+<li class="plane3">plane3</li>
+<li class="plane4">plane4</li>
+</ol> </div>`
 
-
-async function upgrade_airplane(airplane_ar, money){
-
-
+async function upgrade_airplane_md(plane){
+  let airplane = await fetch(`http://localhost:3000/upgrade_airplane_md/${plane}`);
+  airplane = await airplane.json();
+  console.log(airplane);
 }
 
 
@@ -53,6 +58,31 @@ function eventWindow(event) {
 // BUTTONS
 upgradeButton.addEventListener('click', function(evt) {
     eventWindow(upgradeEvent);
+
+    const planeitem = document.querySelectorAll('#event-window .planes li')
+
+    planeitem.forEach(item => {
+    item.addEventListener('click', () =>{
+
+      if (item.className === 'plane2') {
+        const planenumber = 2
+        upgrade_airplane_md(planenumber)
+      }
+      if (item.className === 'plane3') {
+        const planenumber = 3
+        upgrade_airplane_md(planenumber)
+      }
+      if (item.className === 'plane4') {
+        const planenumber = 4
+        upgrade_airplane_md(planenumber)
+      }
+
+
+      /*const planenumber = item.className*/
+
+
+  })
+})
 });
 
 

@@ -1,4 +1,5 @@
 # backend.py
+from wsgiref.util import application_uri
 
 from flask import Flask, request, Response, jsonify
 import mysql.connector
@@ -116,17 +117,18 @@ def find_ports():
 
 
 #upgrade plane
-@app.route("/upgrade_airplane_md")
+@app.route("/upgrade_airplane_md/<value>")
 
-def upgrade_airplane_md():
-    money = 2000
+def upgrade_airplane_md(value):
+    value = float(value)
+    money = 200
 
     airplane_di = {
-        "tyyppi": "Lilla Damen 22",
-        "kantama": 600,
-        "kerroin": 1,
-        "hinta": 0,
-        "valinnanvara": 4
+        "type": "Lilla Damen 22",
+        "distance": 600,
+        "factor": 1,
+        "price": 0,
+        "selection": 4
     }
 
 
@@ -142,27 +144,27 @@ def upgrade_airplane_md():
     kursori = yhteys.cursor()
 
 
-    sql = f"select type, distance, selection, price, factor from airplane where id = '{2}'"
+    sql = f"select type, distance, selection, price, factor from airplane where id = '{value}'"
     kursori.execute(sql)
     information = kursori.fetchall()
 
     try:
         for value in information:
             if money >= float(value[3]):
-                if airplane_di["tyyppi"] != value[0]:
+                if airplane_di["type"] != value[0]:
                     paivitys = {
-                        "tyyppi": value[0],
-                        "kantama": value[1],
-                        "valinnanvara": value[2],
-                        "hinta": value[3],
-                        "kerroin": value[4]
+                        "type": value[0],
+                        "distance": value[1],
+                        "selection": value[2],
+                        "price": value[3],
+                        "factor": value[4]
                     }
                     vahennys = money - float(value[3])
                     airplane_di = paivitys
                     status = 200
 
 
-                return jsonify({"airplane_di": airplane_di, "money_remaining": vahennys}), status
+                return Response(response=json.dumps(airplane_di), status=status, mimetype="application/json")
 
         #If you don't have enough money, or you already have this type of plane
         status = 400
