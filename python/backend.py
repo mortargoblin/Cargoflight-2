@@ -1,15 +1,17 @@
 # backend.py
-from wsgiref.util import application_uri
 
 from flask import Flask, request, Response, jsonify
 import mysql.connector
+from flask_cors import CORS
 
 import random
 import json
 from geopy import distance
 
 
+
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:63342"])
 @app.route("/find-ports")
 def find_ports():
 
@@ -21,6 +23,7 @@ def find_ports():
         "hinta": 0,
         "valinnanvara": 4
     }
+
 
     sij = request.args["location"]
     suunta = request.args["direction"]
@@ -117,19 +120,25 @@ def find_ports():
 
 
 #upgrade plane
-@app.route("/upgrade_airplane_md/<value>")
+@app.route("/upgrade_airplane_md/<value>", methods=['POST'])
 
 def upgrade_airplane_md(value):
+    data = request.get_json()
     value = float(value)
-    money = 200
+
+    airplane_ar = data['airplane_ar']
+
+    plane_spec = airplane_ar[0]
 
     airplane_di = {
-        "type": "Lilla Damen 22",
-        "distance": 600,
-        "factor": 1,
-        "price": 0,
-        "selection": 4
+        "type": plane_spec['type'],
+        "distance": plane_spec["distance"],
+        "factor": plane_spec["factor"],
+        "price": plane_spec["price"],
+        "selection": plane_spec["selection"]
     }
+
+
 
 
     yhteys = mysql.connector.connect(
@@ -152,19 +161,29 @@ def upgrade_airplane_md(value):
         for value in information:
             if money >= float(value[3]):
                 if airplane_di["type"] != value[0]:
-                    paivitys = {
-                        "type": value[0],
-                        "distance": value[1],
-                        "selection": value[2],
-                        "price": value[3],
-                        "factor": value[4]
+                    upgrade = {
+                        "airplane_data":{
+                            "type": value[0],
+                            "distance": value[1],
+                            "selection": value[2],
+                            "price": value[3],
+                            "factor": value[4]
+                        },
+                        "money_remaining": money-float(value[3])
                     }
-                    vahennys = money - float(value[3])
-                    airplane_di = paivitys
                     status = 200
+                    return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
+                else:
+                    message = "You don't have enough money"
+                    status = 400
+                    return Response(response=json.dumps(message), status=status, mimetype="application/json")
 
+            else:
+                message = {"text":"You already have this type of airplane"}
+                status = 400
 
-                return Response(response=json.dumps(airplane_di), status=status, mimetype="application/json")
+                return Response(response=json.dumps(message), status=status, mimetype="application/json")
+
 
         #If you don't have enough money, or you already have this type of plane
         status = 400

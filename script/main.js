@@ -7,6 +7,16 @@ const backButton = document.querySelector('#back');
 
 let nextTurn = true;
 
+let money = 2000000
+
+let airplane_ar = [{
+    type: "Lilla Damen 22",
+    distance: 600,
+    factor: 1,
+    price: 0,
+    selection: 4
+  }]
+
 // EVENTS
 const upgradeEvent = 
 `<div id="event-window"> <h2>Upgrade your airplane</h2> <ol class="planes">
@@ -17,9 +27,22 @@ const upgradeEvent =
 </ol> </div>`
 
 async function upgrade_airplane_md(plane){
-  let airplane = await fetch(`http://localhost:3000/upgrade_airplane_md/${plane}`);
+
+
+  let airplane = await fetch(`http://localhost:3000/upgrade_airplane_md/${plane}`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json",},
+    body: JSON.stringify({
+      money: money,
+      airplane_ar: airplane_ar
+    })
+  });
   airplane = await airplane.json();
-  console.log(airplane);
+
+  money = airplane['money_remaining']
+  console.log(airplane['airplane_data']);
+  console.log(airplane['money_remaining'])
+
 }
 
 
@@ -63,7 +86,10 @@ upgradeButton.addEventListener('click', function(evt) {
 
     planeitem.forEach(item => {
     item.addEventListener('click', () =>{
-
+      if (item.className === 'plane1') {
+        const planenumber = 1
+        upgrade_airplane_md(planenumber)
+      }
       if (item.className === 'plane2') {
         const planenumber = 2
         upgrade_airplane_md(planenumber)
