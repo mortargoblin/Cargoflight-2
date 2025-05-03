@@ -1,8 +1,8 @@
 # backend.py
 
-from flask import Flask, request, Response, jsonify
+from flask import Flask, request, Response
 import mysql.connector
-from flask_cors import CORS
+
 
 import random
 import json
@@ -11,7 +11,7 @@ from geopy import distance
 
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:63342"])
+
 @app.route("/find-ports")
 def find_ports():
 
@@ -120,25 +120,34 @@ def find_ports():
 
 
 #upgrade plane
-@app.route("/upgrade_airplane_md/<value>", methods=['POST'])
+@app.route("/upgrade_airplane")
+#http://localhost:3000/upgrade_airplane_md?airplane_ar=${airplane_ar}&money=${money}&id=${plane}
+def upgrade_airplane_md():
 
-def upgrade_airplane_md(value):
-    data = request.get_json()
-    value = float(value)
-    money = data['money']
+   # money = float(request.args["money"])
+  #  airplane_ar = request.args["airplane_ar"]
+    selected = float(request.args["selected"])
 
-    airplane_ar = data['airplane_ar']
+   # s = airplane_ar[0]
+  #  print(s)
+  #  print(s[0])
 
-    plane_spec = airplane_ar[0]
+    money= 200000000
 
-    airplane_di = {
-        "type": plane_spec['type'],
-        "distance": plane_spec["distance"],
-        "factor": plane_spec["factor"],
-        "price": plane_spec["price"],
-        "selection": plane_spec["selection"]
+    lentokone_di = {
+        "type": "Lilla Damen 22",
+        "distance": 600,
+        "factor": 1,
+        "price": 0,
+        "selection": 4
     }
 
+
+
+   # print(s[0], "j")
+    #print(money)
+
+  #  airplane_di = {"type": s[0]}
 
 
 
@@ -154,14 +163,14 @@ def upgrade_airplane_md(value):
     kursori = yhteys.cursor()
 
 
-    sql = f"select type, distance, selection, price, factor from airplane where id = '{value}'"
+    sql = f"select type, distance, selection, price, factor from airplane where id = '{selected}'"
     kursori.execute(sql)
     information = kursori.fetchall()
 
     try:
         for value in information:
             if money >= float(value[3]):
-                if airplane_di["type"] != value[0]:
+                if lentokone_di["type"] != value[0]:
                     upgrade = {
                         "airplane_data":{
                             "type": value[0],
@@ -173,24 +182,23 @@ def upgrade_airplane_md(value):
                         "money_remaining": money-float(value[3])
                     }
                     status = 200
+                    print(upgrade)
                     return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
-            
+
 
         #If you don't have enough money, or you already have this type of plane
         status = 400
-        return jsonify({
-            "error": "You already have this type of airplane or not enough money",
-            "money_remaining": money
-        }), status
+        text = {"text": "This dosen't work"}
+        return Response(response=json.dumps(text), status=status, mimetype="application/json")
+
+
 
     #If upgrade value is wrong
     except ValueError:
 
         status = 400
-        return jsonify({
-            "error": "Wrong data or value",
-            "money_remaining": money
-        }), status
+        text = {"text": "This dosen't work"}
+        return Response(response=json.dumps(text), status=status, mimetype="application/json")
 
 
 

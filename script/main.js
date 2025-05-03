@@ -29,16 +29,8 @@ const upgradeEvent =
 async function upgrade_airplane_md(plane){
 
 
-  let airplane = await fetch(`http://localhost:3000/upgrade_airplane_md/${plane}`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json",},
-    body: JSON.stringify({
-      money: money,
-      airplane_ar: airplane_ar
-    })
-  });
+  let airplane = await fetch(`http://localhost:3000/upgrade_airplane_md?selected=${plane}`)
   airplane = await airplane.json();
-
   money = airplane['money_remaining']
   console.log(airplane['airplane_data']);
   console.log(airplane['money_remaining'])
