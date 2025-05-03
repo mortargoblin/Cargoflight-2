@@ -2,7 +2,7 @@
 
 from flask import Flask, request, Response
 import mysql.connector
-
+from flask_cors import CORS
 
 import random
 import json
@@ -12,6 +12,7 @@ from geopy import distance
 
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:63342"])
 
 @app.route("/find-ports")
 def find_ports():
@@ -126,11 +127,14 @@ def find_ports():
 def upgrade_airplane():
 
     value = float(request.args.get("id"))
+    money = float(request.args.get("money"))
 
     plane = request.args.get("airplane_ar", [])
     plane_di = json.loads(plane)
 
-    money = 20000000
+    #value = float(value)
+
+    #money = 20000000
 
     lentokone_di = {
         "type": "Lilla Damen 22",
@@ -141,13 +145,10 @@ def upgrade_airplane():
     }
 
 
-
+    #print(value_num)
     print(value)
     print(plane_di[0]["type"])
     print(money)
-
-
-
     print(lentokone_di)
 
 
@@ -178,7 +179,7 @@ def upgrade_airplane():
     try:
         for value in information:
             if money >= float(value[3]):
-                if lentokone_di["type"] != value[0]:
+                if plane_di[0]["type"] != value[0]:
                     upgrade = {
                         "airplane_data":{
                             "type": value[0],
