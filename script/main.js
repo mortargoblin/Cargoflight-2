@@ -4,6 +4,7 @@
 const upgradeButton = document.querySelector('#upgrade');
 const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
+const closeEvent = document.querySelector('#closeEvent');
 
 let nextTurn = true;
 
@@ -17,14 +18,15 @@ let airplane_ar = [{
     selection: 4
   }]
 
-// EVENTS
+// EVENTS 
+
 const upgradeEvent = 
-`<div id="event-window"> <h2>Upgrade your airplane</h2> <ol class="planes">
+`<h2>Upgrade your airplane</h2> <ol class="planes">
 <li class="plane1">plane1</li>
 <li class="plane2">plane2</li>
 <li class="plane3">plane3</li>
 <li class="plane4">plane4</li>
-</ol> </div>`
+</ol>`
 
 async function upgrade_airplane_md(plane){
 
@@ -64,7 +66,13 @@ function markMap(airports) {
 function eventWindow(event) {
   document.querySelector('#event-container').style.display = 'block';
   document.querySelector('#map').style.display = 'none';
-  document.querySelector('#event-container').innerHTML = event;
+  document.querySelector('#event').innerHTML = event;
+}
+
+function closeEventWindow() {
+  document.querySelector('#event-container').style.display = 'hidden';
+  document.querySelector('#map').style.display = 'block';
+  document.querySelector('#event').innerHTML = '';
 }
 
 
@@ -97,13 +105,15 @@ upgradeButton.addEventListener('click', function(evt) {
 
 
       /*const planenumber = item.className*/
-
-
+    })
   })
-})
 });
 
-
+closeEvent.addEventListener('click', function() {
+  document.querySelector('#event-container').style.display = 'hidden';
+  document.querySelector('#map').style.display = 'block';
+  document.querySelector('#event').innerHTML = ''; 
+});
 
 // KEYBINDS
 document.addEventListener('keydown', async function(evt) {
