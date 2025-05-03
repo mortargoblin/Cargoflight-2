@@ -197,6 +197,7 @@ def upgrade_airplane():
                         "price": value[3],
                         "selection": value[4]
                     }
+                    print(lentokone_di)
 
                 else:
                     upgrade = {"text": "You already have this type of plane"}
