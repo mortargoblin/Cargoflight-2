@@ -10,6 +10,7 @@ from geopy import distance
 
 
 
+
 app = Flask(__name__)
 
 @app.route("/find-ports")
@@ -17,11 +18,11 @@ def find_ports():
 
     ## TEMPORARY PLANE MODEL
     lentokone_di = {
-        "tyyppi": "Lilla Damen 22",
-        "kantama": 600,
-        "kerroin": 1,
-        "hinta": 0,
-        "valinnanvara": 4
+        "type": "Lilla Damen 22",
+        "distance": 600,
+        "factor": 1,
+        "price": 0,
+        "selection": 4
     }
 
 
@@ -29,8 +30,8 @@ def find_ports():
     suunta = request.args["direction"]
     
     #lentokone_di = request.args["plane-model"]
-    kant = lentokone_di["kantama"]
-    valvara = lentokone_di["valinnanvara"]
+    kant = lentokone_di["distance"]
+    valvara = lentokone_di["selection"]
 
     yhteys = mysql.connector.connect (
         host='127.0.0.1',
@@ -48,7 +49,7 @@ def find_ports():
     kursori.execute(sql)
     sij_deg = kursori.fetchone()
     # Seuraavaksi haetaan tietokannasta KAIKKIEN kenttien allamerkityt tiedot.
-    if lentokone_di["tyyppi"] == "Mamma Birgitta 25":
+    if lentokone_di["type"] == "Mamma Birgitta 25":
         sql = (f"SELECT ident, name, type, iso_country, latitude_deg,"
                 " longitude_deg FROM airport WHERE type='large_airport'")
     else:
@@ -122,17 +123,14 @@ def find_ports():
 #upgrade plane
 @app.route("/upgrade_airplane")
 #http://localhost:3000/upgrade_airplane_md?airplane_ar=${airplane_ar}&money=${money}&id=${plane}
-def upgrade_airplane_md():
+def upgrade_airplane():
 
-   # money = float(request.args["money"])
-  #  airplane_ar = request.args["airplane_ar"]
-    selected = float(request.args["selected"])
+    value = float(request.args.get("id"))
 
-   # s = airplane_ar[0]
-  #  print(s)
-  #  print(s[0])
+    plane = request.args.get("airplane_ar", [])
+    plane_di = json.loads(plane)
 
-    money= 200000000
+    money = 20000000
 
     lentokone_di = {
         "type": "Lilla Damen 22",
@@ -141,6 +139,16 @@ def upgrade_airplane_md():
         "price": 0,
         "selection": 4
     }
+
+
+
+    print(value)
+    print(plane_di[0]["type"])
+    print(money)
+
+
+
+    print(lentokone_di)
 
 
 
@@ -163,7 +171,7 @@ def upgrade_airplane_md():
     kursori = yhteys.cursor()
 
 
-    sql = f"select type, distance, selection, price, factor from airplane where id = '{selected}'"
+    sql = f"select type, distance, selection, price, factor from airplane where id = '{value}'"
     kursori.execute(sql)
     information = kursori.fetchall()
 
@@ -182,23 +190,29 @@ def upgrade_airplane_md():
                         "money_remaining": money-float(value[3])
                     }
                     status = 200
-                    print(upgrade)
-                    return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
+                    lentokone_di = {
+                        "type": value[0],
+                        "distance": value[1],
+                        "factor": value[2],
+                        "price": value[3],
+                        "selection": value[4]
+                    }
 
+                else:
+                    upgrade = {"text": "You already have this type of plane"}
+                    status = 400
+            else:
+                upgrade = {"text": "Money is not enough"}
+                status = 404
+
+    except Exception as e:
+        upgrade = {"text": "Error: " + str(e)}
+        status = 500
+
+    return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
 
         #If you don't have enough money, or you already have this type of plane
-        status = 400
-        text = {"text": "This dosen't work"}
-        return Response(response=json.dumps(text), status=status, mimetype="application/json")
 
-
-
-    #If upgrade value is wrong
-    except ValueError:
-
-        status = 400
-        text = {"text": "This dosen't work"}
-        return Response(response=json.dumps(text), status=status, mimetype="application/json")
 
 
 
