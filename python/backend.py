@@ -37,7 +37,7 @@ def find_ports():
     yhteys = mysql.connector.connect (
         host='127.0.0.1',
         port= 3306,
-        database='flight_game',
+        database='rahtipeli',
         user='pythonuser',  # HUOM käyttäjä: pythonuser
         password='salainen-sana',  #HUOM salasana
         autocommit=True,
@@ -136,7 +136,7 @@ def upgrade_airplane():
     yhteys = mysql.connector.connect(
         host='127.0.0.1',
         port=3306,
-        database='flight_game',
+        database='rahtipeli',
         user='pythonuser',  # HUOM käyttäjä: pythonuser
         password='salainen-sana',  # HUOM salasana
         autocommit=True,
@@ -173,25 +173,37 @@ def upgrade_airplane():
                 else:
                     upgrade = {
                         "airplane_data": {
-                            "type": value[0],
-                            "distance": value[1],
-                            "selection": value[2],
-                            "price": value[3],
-                            "factor": value[4]
+                            "type": plane_di[0]["type"],
+                            "distance": plane_di[0]["distance"],
+                            "selection": plane_di[0]["selection"],
+                            "price": plane_di[0]["price"],
+                            "factor": plane_di[0]["factor"]
                         },
-                        "money_remaining": money - float(value[3]),
-                        "text": "Your upgrade is completed"
+                        "money_remaining": money,
+                        "text": "You already have this plane"
                     }
-                    status = 200
-
-    except IndexError:
-        for value in information:
-            if money >= float(value[3]):
-                upgrade = {"text": "You already have this type of plane"}
-                status = 300
-            if plane_di[0]["type"] != value[0]:
-                upgrade = {"text": "You already have this type of plane"}
+                    status = 400
+            else:
+                upgrade = {
+                    "airplane_data": {
+                        "type": plane_di[0]["type"],
+                        "distance": plane_di[0]["distance"],
+                        "selection": plane_di[0]["selection"],
+                        "price": plane_di[0]["price"],
+                        "factor": plane_di[0]["factor"]
+                    },
+                    "money_remaining": money,
+                    "text": "You don't have enough money"
+                }
                 status = 400
+
+    except IndexError as e:
+        status = 500
+        upgrade = {
+            "airplane_data": {
+
+            }
+        }
 
     return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
 
