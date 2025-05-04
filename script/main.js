@@ -72,6 +72,7 @@ async function findPorts(direction) {
   console.log(response);
 
   markDestinationList(response);
+  markMap(response);
   refreshDestinationListener();
   return response[0];
 }
@@ -88,8 +89,8 @@ function markDestinationList(airports) {
 
 function markMap(airports) {
   for (let i = 0; i < airports.length; i++) {
-    L.marker([airports[i]["lat"], airports[i]["lon"]]).addTo(map)
-    .bindPopup(airports[i]["ident"])
+    L.marker([airports[i]["lat"], airports[i]["long"]]).addTo(map)
+    .bindPopup(airports[i]["name"])
     .openPopup();
   }
 }
