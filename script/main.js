@@ -42,12 +42,20 @@ const upgradeEvent =
 
 
 ////////////// FUNCTIONS
-
+//money=${money}&
 async function upgrade_airplane_md(plane){
   let airplaneArray = encodeURIComponent(JSON.stringify(airplane_ar))
   let airplane = await fetch(`http://localhost:3000/upgrade_airplane?airplane_ar=${airplaneArray}&money=${money}&id=${plane}`);
   airplane = await airplane.json();
-  
+  console.log(airplane['airplane_data']['type'])
+  airplane_ar =[{
+    type: airplane['airplane_data']['type'],
+    distance: airplane['airplane_data']['distance'],
+    factor: airplane['airplane_data']['factor'],
+    price: airplane['airplane_data']['price'],
+    selection: airplane['airplane_data']['selection']
+  }]
+  console.log(airplane_ar)
   console.log(airplane['airplane_data']);
   console.log(airplane['money_remaining']);
 }

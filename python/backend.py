@@ -37,7 +37,7 @@ def find_ports():
     yhteys = mysql.connector.connect (
         host='127.0.0.1',
         port= 3306,
-        database='rahtipeli',
+        database='flight_game',
         user='pythonuser',  # HUOM käyttäjä: pythonuser
         password='salainen-sana',  #HUOM salasana
         autocommit=True,
@@ -180,6 +180,7 @@ def upgrade_airplane():
         for value in information:
             if money >= float(value[3]):
                 if plane_di[0]["type"] != value[0]:
+                    money = money-float(value[3])
                     upgrade = {
                         "airplane_data":{
                             "type": value[0],
