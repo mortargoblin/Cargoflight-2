@@ -4,7 +4,7 @@
 const upgradeButton = document.querySelector('#upgrade');
 const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
-const closeEvent = document.querySelector('#closeEvent');
+const closeEvent = document.querySelector('#close-event');
 
 let nextTurn = true;
 
@@ -48,7 +48,8 @@ async function findPorts(dir) {
   destinationList.innerHTML = '';
   for (let i=0; i < airports.length; i++) {
     destinationList.innerHTML 
-      += `<li id="port-${i}">${airports[i]["ident"]} .. ${airports[i]["name"]}</li>`
+      += `<li id="port-${i}"><div>${airports[i]["ident"]}</div> 
+      <div id="airport-name">${airports[i]["name"]}</div></li>`
   }
 }
 
@@ -63,15 +64,18 @@ function markMap(airports) {
 
 // Show overlayed windows. events, menus, etc.
 function eventWindow(event) {
-  document.querySelector('#event-container').style.display = 'block';
+
+  const element = document.querySelector('#event-container');
+  element.classList.remove('event-container-hidden');
   document.querySelector('#map').style.display = 'none';
   document.querySelector('#event').innerHTML = event;
 }
 
 function closeEventWindow() {
-  document.querySelector('#event-container').style.display = 'hidden';
+
+  const element = document.querySelector('#event-container');
+  element.classList.add('event-container-hidden');
   document.querySelector('#map').style.display = 'block';
-  document.querySelector('#event').innerHTML = '';
 }
 
 
@@ -109,10 +113,21 @@ upgradeButton.addEventListener('click', function(evt) {
 });
 
 closeEvent.addEventListener('click', function() {
-  document.querySelector('#event-container').style.display = 'hidden';
-  document.querySelector('#map').style.display = 'block';
-  document.querySelector('#event').innerHTML = ''; 
+    closeEventWindow()
 });
+document.querySelector('#north').addEventListener('click', function() {
+  findPorts('N');
+});
+document.querySelector('#west').addEventListener('click', function() {
+  findPorts('W');
+});
+document.querySelector('#east').addEventListener('click', function() {
+  findPorts('E');
+});
+document.querySelector('#south').addEventListener('click', function() {
+  findPorts('S');
+});
+
 
 // KEYBINDS
 document.addEventListener('keydown', async function(evt) {

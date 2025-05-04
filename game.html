@@ -17,9 +17,9 @@
 </head>
 
 <body>
-  <div id="event-container">
+  <div id="event-container" class="event-container-hidden" aria-hidden="true">
     <div id="event-window">
-      <div id="closeEvent">X</div>
+      <div id="close-event">X</div>
       <div id="event"></div>
     </div>
   </div>
@@ -34,7 +34,14 @@
     </div>
     <div class="flex-container">
       <div id="left">
-        <div id="compass"></div>
+        <div id="compass" class="ridged">
+          <div id="west" class="compass-item">W</div>
+          <div id="NS">
+            <div id="north" class="compass-item">N</div>
+            <div id="south" class="compass-item">S</div>
+          </div>
+          <div id="east" class="compass-item">E</div>
+        </div>
         <div id="destinations" class="ridged">
           <h2>Destinations</h2>
           <ul id="destination-list"></ul>
