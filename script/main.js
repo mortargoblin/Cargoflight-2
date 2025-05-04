@@ -1,22 +1,34 @@
 // MAIN.JS
 
+////////////// VARIABLES
 
 const upgradeButton = document.querySelector('#upgrade');
 const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
 const closeEvent = document.querySelector('#close-event');
 
-let nextTurn = true;
 
-let money = 2000000
+let nextTurn = true;
+// TODO: move money to backend
+let money = 2000000;
+let currentLocation = {
+  ident: "EFHK", 
+  name: "Helsinki Vantaa Airport", 
+  type: "large_airport", 
+  iso_country: "FI", 
+  lat: 60.3172, 
+  long: 24.963301
+};
+let targetLocationList = {}
+let targetLocation = {}
 
 let airplane_ar = [{
-    type: "Lilla Damen 22",
-    distance: 600,
-    factor: 1,
-    price: 0,
-    selection: 4
-  }]
+  type: "Lilla Damen 22",
+  distance: 600,
+  factor: 1,
+  price: 0,
+  selection: 4
+}];
 
 // EVENTS 
 
@@ -28,21 +40,22 @@ const upgradeEvent =
 <li class="plane4">plane4</li>
 </ol>`
 
+
+////////////// FUNCTIONS
+
 async function upgrade_airplane_md(plane){
   let airplaneArray = encodeURIComponent(JSON.stringify(airplane_ar))
-  let airplane = await fetch(`http://localhost:3000/upgrade_airplane?airplane_ar=${airplaneArray}&money=${money}&id=${plane}`)
+  let airplane = await fetch(`http://localhost:3000/upgrade_airplane?airplane_ar=${airplaneArray}&money=${money}&id=${plane}`);
   airplane = await airplane.json();
   
   console.log(airplane['airplane_data']);
-  console.log(airplane['money_remaining'])
+  console.log(airplane['money_remaining']);
 
 }
-
-
 // findPorts function
 // update destination-list
 async function findPorts(dir) {
-  let airports = await fetch(`http://localhost:3000/find-ports?location=efhk&direction=${dir}`);
+  let airports = await fetch(`http://localhost:3000/find-ports?location=${currentLocation.ident}&direction=${dir}`);
   airports = await airports.json();
   console.log(airports);
   destinationList.innerHTML = '';
@@ -51,6 +64,7 @@ async function findPorts(dir) {
       += `<li id="port-${i}"><div>${airports[i]["ident"]}</div> 
       <div id="airport-name">${airports[i]["name"]}</div></li>`
   }
+  refreshDestinationListener();
 }
 
 function markMap(airports) {
@@ -61,6 +75,12 @@ function markMap(airports) {
   }
 }
 
+// function that makes player move :D 
+function moveTo(nextLocation) {
+  currentLocation = nextLocation;
+  nextTurn = true;
+  // :DDD
+}
 
 // Show overlayed windows. events, menus, etc.
 function eventWindow(event) {
@@ -79,9 +99,8 @@ function closeEventWindow() {
 }
 
 
+//////////// BUTTONS
 
-
-// BUTTONS
 upgradeButton.addEventListener('click', function(evt) {
     eventWindow(upgradeEvent);
 
@@ -115,6 +134,8 @@ upgradeButton.addEventListener('click', function(evt) {
 closeEvent.addEventListener('click', function() {
     closeEventWindow()
 });
+
+// Compass buttons
 document.querySelector('#north').addEventListener('click', function() {
   findPorts('N');
 });
@@ -128,12 +149,27 @@ document.querySelector('#south').addEventListener('click', function() {
   findPorts('S');
 });
 
+// Movement (via destination list)
+function refreshDestinationListener() {
+  const list = document.querySelector('#destination-list');
+  // lord help me
+  document.querySelector('#destination-list').addEventListener('click', function(evt) {
+    console.log(evt.target);
+    if (evt.target.id.startsWith('port')) {
+      console.log('HIT1');
+    } else if (evt.target.parentElement.id.startsWith('port')) {
+      console.log('HIT2');
+      moveTo()
+    }
+  });
+}
 
-// KEYBINDS
+/////////// KEYBINDS
+
 document.addEventListener('keydown', async function(evt) {
   console.log(evt.key);
   
-  // findPorts(dire2ction) triggered on arrow keydown
+  // findPorts(direction) triggered on arrow keydown
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(evt.key) && nextTurn) {
     if (evt.key === 'ArrowUp') {findPorts('N')}
     if (evt.key === 'ArrowDown') {findPorts('S')}
