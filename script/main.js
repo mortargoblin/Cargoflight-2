@@ -19,8 +19,8 @@ let currentLocation = {
   lat: 60.3172, 
   long: 24.963301
 };
-let targetLocationList = {}
-let targetLocation = {}
+let nextLocationList = []
+let nextLocation = {}
 
 let airplane_ar = [{
   type: "Lilla Damen 22",
@@ -38,7 +38,7 @@ const upgradeEvent =
 <li class="plane2">plane2</li>
 <li class="plane3">plane3</li>
 <li class="plane4">plane4</li>
-</ol>`
+</ol>`;
 
 
 ////////////// FUNCTIONS
@@ -50,36 +50,39 @@ async function upgrade_airplane_md(plane){
   
   console.log(airplane['airplane_data']);
   console.log(airplane['money_remaining']);
-
 }
+
 // findPorts function
 // update destination-list
-async function findPorts(dir) {
-  let airports = await fetch(`http://localhost:3000/find-ports?location=${currentLocation.ident}&direction=${dir}`);
-  airports = await airports.json();
-  console.log(airports);
+async function findPorts(direction) {
+  const airports = await fetch(
+    `http://localhost:3000/find-ports?location=${currentLocation.ident}
+    &direction=${direction}`
+  );
+  const response = await airports.json();
+  console.log(response);
+
+  markDestinationList(response);
+  refreshDestinationListener();
+  return response[0];
+}
+
+function markDestinationList(airports) {
   destinationList.innerHTML = '';
-  for (let i=0; i < airports.length; i++) {
-    destinationList.innerHTML 
-      += `<li id="port-${i}"><div>${airports[i]["ident"]}</div> 
+  console.log('destination list airports length', airports.length);
+  for (let i = 0; i < airports.length; i++) {
+    destinationList.innerHTML += 
+      `<li id="port-${i}"><div>${airports[i]["ident"]}</div> 
       <div id="airport-name">${airports[i]["name"]}</div></li>`
   }
-  refreshDestinationListener();
 }
 
 function markMap(airports) {
   for (let i = 0; i < airports.length; i++) {
     L.marker([airports[i]["lat"], airports[i]["lon"]]).addTo(map)
-  .bindPopup(airports[i]["ident"])
-  .openPopup();
+    .bindPopup(airports[i]["ident"])
+    .openPopup();
   }
-}
-
-// function that makes player move :D 
-function moveTo(nextLocation) {
-  currentLocation = nextLocation;
-  nextTurn = true;
-  // :DDD
 }
 
 // Show overlayed windows. events, menus, etc.
@@ -154,12 +157,14 @@ function refreshDestinationListener() {
   const list = document.querySelector('#destination-list');
   // lord help me
   document.querySelector('#destination-list').addEventListener('click', function(evt) {
-    console.log(evt.target);
     if (evt.target.id.startsWith('port')) {
-      console.log('HIT1');
+      const id = evt.target.id.split('-').pop();
+      console.log(id);
+      // move to HERE
     } else if (evt.target.parentElement.id.startsWith('port')) {
-      console.log('HIT2');
-      moveTo()
+      const id = evt.target.parentElement.id.split('-').pop();
+      console.log(id);
+      // move to HERE
     }
   });
 }
@@ -169,12 +174,4 @@ function refreshDestinationListener() {
 document.addEventListener('keydown', async function(evt) {
   console.log(evt.key);
   
-  // findPorts(direction) triggered on arrow keydown
-  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(evt.key) && nextTurn) {
-    if (evt.key === 'ArrowUp') {findPorts('N')}
-    if (evt.key === 'ArrowDown') {findPorts('S')}
-    if (evt.key === 'ArrowLeft') {findPorts('W')}
-    if (evt.key === 'ArrowRight') {findPorts('E')}
-  }
-
 });

@@ -90,7 +90,7 @@ def find_ports():
             pool.remove(pool_current)
 
             tulos.append({
-                "id": i + 1,
+                "id": i,
                 "ident": pool_current[0],
                 "name": pool_current[1],
                 "type": pool_current[2],
