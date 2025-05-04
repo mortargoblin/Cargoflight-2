@@ -48,6 +48,7 @@ async function upgrade_airplane_md(plane){
   let airplane = await fetch(`http://localhost:3000/upgrade_airplane?airplane_ar=${airplaneArray}&money=${money}&id=${plane}`);
   airplane = await airplane.json();
   console.log(airplane['airplane_data']['type'])
+  money = airplane['money_remaining']
   airplane_ar =[{
     type: airplane['airplane_data']['type'],
     distance: airplane['airplane_data']['distance'],
