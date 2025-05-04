@@ -132,33 +132,6 @@ def upgrade_airplane():
     plane = request.args.get("airplane_ar", [])
     plane_di = json.loads(plane)
 
-    #value = float(value)
-
-    #money = 20000000
-
-    lentokone_di = {
-        "type": "Lilla Damen 22",
-        "distance": 600,
-        "factor": 1,
-        "price": 0,
-        "selection": 4
-    }
-
-
-    #print(value_num)
-    print(value)
-    print(plane_di[0]["type"])
-    print(money)
-    print(lentokone_di)
-
-
-
-   # print(s[0], "j")
-    #print(money)
-
-  #  airplane_di = {"type": s[0]}
-
-
 
     yhteys = mysql.connector.connect(
         host='127.0.0.1',
@@ -176,11 +149,15 @@ def upgrade_airplane():
     kursori.execute(sql)
     information = kursori.fetchall()
 
+    print(plane_di[0]["type"])
+
+
     try:
         for value in information:
             if money >= float(value[3]):
                 if plane_di[0]["type"] != value[0]:
-                    money = money-float(value[3])
+                    print(value[0])
+
                     upgrade = {
                         "airplane_data":{
                             "type": value[0],
@@ -189,28 +166,32 @@ def upgrade_airplane():
                             "price": value[3],
                             "factor": value[4]
                         },
-                        "money_remaining": money-float(value[3])
+                        "money_remaining": money-float(value[3]),
+                        "text": "Your upgrade is completed"
                     }
                     status = 200
-                    lentokone_di = {
-                        "type": value[0],
-                        "distance": value[1],
-                        "factor": value[2],
-                        "price": value[3],
-                        "selection": value[4]
-                    }
-                    print(lentokone_di)
-
                 else:
-                    upgrade = {"text": "You already have this type of plane"}
-                    status = 400
-            else:
-                upgrade = {"text": "Money is not enough"}
-                status = 404
+                    upgrade = {
+                        "airplane_data": {
+                            "type": value[0],
+                            "distance": value[1],
+                            "selection": value[2],
+                            "price": value[3],
+                            "factor": value[4]
+                        },
+                        "money_remaining": money - float(value[3]),
+                        "text": "Your upgrade is completed"
+                    }
+                    status = 200
 
-    except Exception as e:
-        upgrade = {"text": "Error: " + str(e)}
-        status = 500
+    except IndexError:
+        for value in information:
+            if money >= float(value[3]):
+                upgrade = {"text": "You already have this type of plane"}
+                status = 300
+            if plane_di[0]["type"] != value[0]:
+                upgrade = {"text": "You already have this type of plane"}
+                status = 400
 
     return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
 
