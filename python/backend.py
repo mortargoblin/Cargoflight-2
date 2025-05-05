@@ -14,6 +14,40 @@ from geopy import distance
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:63342"])
 
+
+@app.route("/create_new_game")
+def find_ports():
+    ## TEMPORARY PLANE MODEL
+    try:
+
+
+        yhteys = mysql.connector.connect(
+            host='127.0.0.1',
+            port=3306,
+            database='Cargogame',
+            user='pythonuser',  # HUOM käyttäjä: pythonuser
+            password='salainen-sana',  # HUOM salasana
+            autocommit=True,
+            collation='utf8mb3_general_ci'
+        )
+        kursori = yhteys.cursor()
+
+        # Ensimmäiseksi selvitetään lähtöpaikan sijainti
+        sql = (f"""INSERT INTO player_stats (money, airplane, location, shifts)
+    VALUES (200000, 1, EFHK, 30)"""
+               )
+
+        kursori.execute(sql)
+        player_data = kursori.fetchall()
+        data = {
+            "f": player_data[0]
+            "s": player_data[2]
+        }
+
+        return Response(response=player_data, status=200, mimetype="application/json")
+
+
+
 @app.route("/find-ports")
 def find_ports():
 
