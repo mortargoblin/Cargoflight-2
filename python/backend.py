@@ -149,8 +149,6 @@ def upgrade_airplane():
     kursori.execute(sql)
     information = kursori.fetchall()
 
-    print(plane_di[0]["type"])
-
 
     try:
         for value in information:
@@ -172,14 +170,26 @@ def upgrade_airplane():
                     status = 200
                 else:
                     upgrade = {
-                        "airplane_data": plane_di,
+                        "airplane_data":{
+                            "type": value[0],
+                            "distance": value[1],
+                            "selection": value[2],
+                            "price": value[3],
+                            "factor": value[4]
+                        },
                         "money_remaining": money,
                         "text": "You already have this plane"}
 
                     status = 400
             else:
                 upgrade = {
-                    "airplane_data": plane_di,
+                    "airplane_data": {
+                        "type": value[0],
+                        "distance": value[1],
+                        "selection": value[2],
+                        "price": value[3],
+                        "factor": value[4]
+                    },
                     "money_remaining": money,
                     "text": "You don't have enough money."}
 
