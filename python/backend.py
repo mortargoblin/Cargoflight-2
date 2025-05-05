@@ -37,7 +37,7 @@ def find_ports():
     yhteys = mysql.connector.connect (
         host='127.0.0.1',
         port= 3306,
-        database='rahtipeli',
+        database='Cargogame',
         user='pythonuser',  # HUOM käyttäjä: pythonuser
         password='salainen-sana',  #HUOM salasana
         autocommit=True,
@@ -136,7 +136,7 @@ def upgrade_airplane():
     yhteys = mysql.connector.connect(
         host='127.0.0.1',
         port=3306,
-        database='rahtipeli',
+        database='Cargogame',
         user='pythonuser',  # HUOM käyttäjä: pythonuser
         password='salainen-sana',  # HUOM salasana
         autocommit=True,
@@ -172,30 +172,19 @@ def upgrade_airplane():
                     status = 200
                 else:
                     upgrade = {
-                        "airplane_data": {
-                            "type": plane_di[0]["type"],
-                            "distance": plane_di[0]["distance"],
-                            "selection": plane_di[0]["selection"],
-                            "price": plane_di[0]["price"],
-                            "factor": plane_di[0]["factor"]
-                        },
+                        "airplane_data": plane_di,
                         "money_remaining": money,
-                        "text": "You already have this plane"
-                    }
+                        "text": "You already have this plane"}
+
                     status = 400
             else:
                 upgrade = {
-                    "airplane_data": {
-                        "type": plane_di[0]["type"],
-                        "distance": plane_di[0]["distance"],
-                        "selection": plane_di[0]["selection"],
-                        "price": plane_di[0]["price"],
-                        "factor": plane_di[0]["factor"]
-                    },
+                    "airplane_data": plane_di,
                     "money_remaining": money,
-                    "text": "You don't have enough money"
-                }
+                    "text": "You don't have enough money."}
+
                 status = 400
+
 
     except IndexError as e:
         status = 500
