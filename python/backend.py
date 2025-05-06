@@ -209,57 +209,17 @@ def upgrade_airplane():
         for value in information:
             if money >= float(value[3]):
                 if plane_di[0]["type"] != value[0]:
-                    print(value[0])
+                    new_player_stats = f"INSERT INTO player_stats (money, airplane) VALUES ('{money-float(value[3])}', '{value}') WHERE id=1"
 
-                    upgrade = {
-                        "airplane_data":{
-                            "type": value[0],
-                            "distance": value[1],
-                            "selection": value[2],
-                            "price": value[3],
-                            "factor": value[4]
-                        },
-                        "money_remaining": money-float(value[3]),
-                        "text": "Your upgrade is completed"
-                    }
                     status = 200
-                else:
-                    upgrade = {
-                        "airplane_data":{
-                            "type": value[0],
-                            "distance": value[1],
-                            "selection": value[2],
-                            "price": value[3],
-                            "factor": value[4]
-                        },
-                        "money_remaining": money,
-                        "text": "You already have this plane"}
+                    message = {"text": "Upgrade has succeed", "money_remaining": money-float(value[3])}
 
-                    status = 400
-            else:
-                upgrade = {
-                    "airplane_data": {
-                        "type": value[0],
-                        "distance": value[1],
-                        "selection": value[2],
-                        "price": value[3],
-                        "factor": value[4]
-                    },
-                    "money_remaining": money,
-                    "text": "You don't have enough money."}
+    except IndexError:
+        status = 400
+        message = {"text": "You already have this type of plane or you don't have enough money",
+                   "money_remaining": money}
 
-                status = 400
-
-
-    except IndexError as e:
-        status = 500
-        upgrade = {
-            "airplane_data": {
-
-            }
-        }
-
-    return Response(response=json.dumps(upgrade), status=status, mimetype="application/json")
+    return Response(response=json.dumps(message), status=status, mimetype="application/json")
 
         #If you don't have enough money, or you already have this type of plane
 
