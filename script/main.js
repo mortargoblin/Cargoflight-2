@@ -10,7 +10,13 @@ const closeEvent = document.querySelector('#close-event');
 const player_name = 'tester';
 
 let nextTurn = true;
+<<<<<<< HEAD
 
+=======
+// TODO: move money to backend
+let money = 2000000;
+/*
+>>>>>>> a57319e (some improvements but sql still times out :D)
 let currentLocation = {
   ident: "EFHK", 
   name: "Helsinki Vantaa Airport", 
@@ -19,6 +25,7 @@ let currentLocation = {
   lat: 60.3172, 
   long: 24.963301
 };
+*/
 let nextLocationList = []
 let nextLocation = {}
 
@@ -53,10 +60,13 @@ async function findPorts(direction) {
   );
   const response = await airports.json();
   console.log(response);
-
-  markDestinationList(response);
-  markMap(response);
-  refreshDestinationListener();
+  if (response === 'Too few airports') {
+    alert('Too few airports');
+  } else {
+    markDestinationList(response);
+    markMap(response);
+    refreshDestinationListener();
+  }
   return response[0];
 }
 

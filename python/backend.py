@@ -60,7 +60,7 @@ def find_ports():
     ## TEMPORARY PLANE MODEL
     lentokone_di = {
         "type": "Lilla Damen 22",
-        "distance": 600,
+        "distance": 800,
         "factor": 1,
         "price": 0,
         "selection": 4
@@ -85,10 +85,16 @@ def find_ports():
     sql = f"SELECT latitude_deg, longitude_deg FROM airport where ident = '{sij}'"
     kursori.execute(sql)
     sij_deg = kursori.fetchone()
-    
+    print("airport:", sij)
+    print("coordinates:", sij_deg)
+
+    # km to lat/long degrees
+    kant_restriction = kant / 90
+    print("restriction (deg):", kant_restriction)
+
     # location limiter
-    restricted_lat = (sij_deg[0] - 30, sij_deg[0] + 30)
-    restricted_long = (sij_deg[1] - 30, sij_deg[1] + 30)
+    restricted_lat = (sij_deg[0] - kant_restriction, sij_deg[0] + kant_restriction)
+    restricted_long = (sij_deg[1] - kant_restriction, sij_deg[1] + kant_restriction)
 
     # Seuraavaksi haetaan tietokannasta KAIKKIEN kenttien allamerkityt tiedot.
     if lentokone_di["type"] == "Mamma Birgitta 25":
@@ -100,7 +106,7 @@ def find_ports():
             "FROM airport " 
             "WHERE (type='large_airport' OR type='medium_airport') "
             f"AND latitude_deg > {restricted_lat[0]} AND latitude_deg < {restricted_lat[1]}"
-            f"AND longitude_deg > {restricted_long[0]} AND latitude_deg < {restricted_long[1]}"
+            f"AND longitude_deg > {restricted_long[0]} AND longitude_deg < {restricted_long[1]}"
         )
     kursori.execute(sql)
     airports = kursori.fetchall()
@@ -110,8 +116,12 @@ def find_ports():
     pool = []
     for airport in airports:
         paamaara_deg = (airport[4], airport[5])
-        if (distance.distance(sij_deg, paamaara_deg).km < kant and 
-        airport[0] != sij and paamaara_deg[1] < 55):
+        
+        # if  
+        if (
+            distance.distance(sij_deg, paamaara_deg).km < kant 
+            and airport[0] != sij
+        ):
             if suunta=="N": #north
                 if paamaara_deg[0] > sij_deg[0]:
                     pool.append(airport)
