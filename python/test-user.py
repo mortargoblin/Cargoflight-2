@@ -1,4 +1,5 @@
 # Script to create example user to player_stats in Cargogame db
+import mysql.connector
 
 yhteys = mysql.connector.connect(
     host='127.0.0.1',
