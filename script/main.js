@@ -7,6 +7,7 @@ const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
 const closeEvent = document.querySelector('#close-event');
 
+const player_name = 'tester';
 
 let nextTurn = true;
 // TODO: move money to backend
@@ -71,7 +72,7 @@ async function upgrade_airplane_md(plane){
 // update destination-list
 async function findPorts(direction) {
   const airports = await fetch(
-    `http://localhost:3000/find-ports?location=${currentLocation.ident}
+    `http://localhost:3000/find-ports?player=${player_name}
     &direction=${direction}`
   );
   const response = await airports.json();
@@ -177,11 +178,11 @@ function refreshDestinationListener() {
       const id = evt.target.id.split('-').pop();
       console.log(id);
       // move to HERE
-    } else if (evt.target.parentElement.id.startsWith('port')) {
-      const id = evt.target.parentElement.id.split('-').pop();
-      console.log(id);
+    } // else if (evt.target.parentElement.id.startsWith('port')) {
+      // const id = evt.target.parentElement.id.split('-').pop();
+      // console.log(id);
       // move to HERE
-    }
+    //}
   });
 }
 

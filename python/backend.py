@@ -45,6 +45,7 @@ def create_new_game():
 
     kursori.execute(sql)
 
+##### MOVE TO
 @app.route('/move-to/<player>/<icao>')
 def move_to(player, icao):
     sql = (
@@ -62,6 +63,7 @@ def move_to(player, icao):
     response = kursori.fetchone()
     return str(response[0])
 
+#### FIND PORTS
 @app.route("/find-ports")
 def find_ports():
 
@@ -74,8 +76,17 @@ def find_ports():
         "selection": 4
     }
 
+    player = request.args["player"]
+    
+    kursori.execute(
+        "SELECT location FROM player_stats "
+        f"WHERE name = '{player}'"
+    )
 
-    sij = request.args["location"]
+    sij = kursori.fetchone()[0]
+    
+    print('!!!!!!!!!!!!!!', sij)
+
     suunta = request.args["direction"]
     
     #lentokone_di = request.args["plane-model"]
