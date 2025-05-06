@@ -10,13 +10,10 @@ const closeEvent = document.querySelector('#close-event');
 const player_name = 'tester';
 
 let nextTurn = true;
-<<<<<<< HEAD
 
-=======
 // TODO: move money to backend
 let money = 2000000;
 /*
->>>>>>> a57319e (some improvements but sql still times out :D)
 let currentLocation = {
   ident: "EFHK", 
   name: "Helsinki Vantaa Airport", 
