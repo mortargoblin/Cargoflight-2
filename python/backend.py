@@ -16,35 +16,45 @@ CORS(app, origins=["http://localhost:63342"])
 
 
 @app.route("/create_new_game")
-def find_ports():
+def create_new_game():
     ## TEMPORARY PLANE MODEL
+    yhteys = mysql.connector.connect(
+        host='127.0.0.1',
+        port=3306,
+        database='Cargogame',
+        user='pythonuser',  # HUOM käyttäjä: pythonuser
+        password='salainen-sana',  # HUOM salasana
+        autocommit=True,
+        collation='utf8mb3_general_ci'
+    )
+    kursori = yhteys.cursor()
+
+    # Ensimmäiseksi selvitetään lähtöpaikan sijainti
+    sql = (f"""INSERT INTO player_stats (name, money, airplane, location, shifts) VALUES ('joku', 200000, 1, 'EFHK', 30)"""
+           )
+
+    kursori.execute(sql)
+    player_data = kursori.fetchall()
+
+
     try:
+        for data in player_data:
+            data = {"this":{
+                "f": data[0],
+                "s": data[1],
+                "t": data[2],
+                "fo": data[3],
+                "fi": data[4],
+
+            }}
+            status = 200
 
 
-        yhteys = mysql.connector.connect(
-            host='127.0.0.1',
-            port=3306,
-            database='Cargogame',
-            user='pythonuser',  # HUOM käyttäjä: pythonuser
-            password='salainen-sana',  # HUOM salasana
-            autocommit=True,
-            collation='utf8mb3_general_ci'
-        )
-        kursori = yhteys.cursor()
+    except IndexError as e:
+        data = "juu"
+        status = 20
 
-        # Ensimmäiseksi selvitetään lähtöpaikan sijainti
-        sql = (f"""INSERT INTO player_stats (money, airplane, location, shifts)
-    VALUES (200000, 1, EFHK, 30)"""
-               )
-
-        kursori.execute(sql)
-        player_data = kursori.fetchall()
-        data = {
-            "f": player_data[0]
-            "s": player_data[2]
-        }
-
-        return Response(response=player_data, status=200, mimetype="application/json")
+        return Response(response=json.dumps(data), status=status, mimetype="application/json")
 
 
 

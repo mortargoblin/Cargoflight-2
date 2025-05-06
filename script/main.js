@@ -45,6 +45,12 @@ const upgradeEvent =
 
 async function upgrade_airplane_md(plane){
   let airplaneArray = encodeURIComponent(JSON.stringify(airplane_ar))
+
+  let test = await fetch(`http://localhost:3000/create_new_game`)
+  test = await test.json();
+
+
+
   let airplane = await fetch(`http://localhost:3000/upgrade_airplane?airplane_ar=${airplaneArray}&money=${money}&id=${plane}`);
   airplane = await airplane.json();
   money = airplane['money_remaining']
@@ -55,6 +61,7 @@ async function upgrade_airplane_md(plane){
     price: airplane['airplane_data']['price'],
     selection: airplane['airplane_data']['selection']
   }]
+  console.log(test)
   console.log(airplane['text']);
   console.log(airplane['airplane_data']);
   console.log(airplane['money_remaining']);
