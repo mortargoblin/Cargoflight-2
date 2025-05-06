@@ -4,11 +4,14 @@ yhteys = mysql.connector.connect(
     host='127.0.0.1',
     port=3306,
     database='Cargogame',
-    user='pythonuser',  # HUOM käyttäjä: pythonuser
-    password='salainen-sana',  # HUOM salasana
+    user='pythonuser',
+    password='salainen-sana',
     autocommit=True,
     collation='utf8mb3_general_ci'
 )
 cursor = yhteys.cursor()
 
-cursor.execute('')
+cursor.execute(
+    "INSERT INTO player_stats (id, name, money, location, airplane)"
+    "VALUES (0, 'tester', 100000000, 'efhk', 2)"
+)
