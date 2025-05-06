@@ -48,18 +48,17 @@ def create_new_game():
 ##### MOVE TO
 @app.route('/move-to/<player>/<icao>')
 def move_to(player, icao):
-    sql = (
+
+    kursori.execute(
         "UPDATE player_stats "
         f"SET location = '{icao}' "
         f"WHERE name = '{player}' "
-        )
-    kursori.execute(sql)
-    sql = (
+    )
+    kursori.execute(
         "SELECT location "
         "FROM player_stats "
         f"WHERE name = '{player}' "
     )
-    kursori.execute(sql)
     response = kursori.fetchone()
     return str(response[0])
 
@@ -85,8 +84,6 @@ def find_ports():
 
     sij = kursori.fetchone()[0]
     
-    print('!!!!!!!!!!!!!!', sij)
-
     suunta = request.args["direction"]
     
     #lentokone_di = request.args["plane-model"]
@@ -97,6 +94,11 @@ def find_ports():
     sql = f"SELECT latitude_deg, longitude_deg FROM airport where ident = '{sij}'"
     kursori.execute(sql)
     sij_deg = kursori.fetchone()
+    
+    # location limiter
+    restricted_lat = (sij_deg[0] - 30, sij_deg[0] + 30)
+    restricted_long = (sij_deg[1] - 30, sij_deg[1] + 30)
+
     # Seuraavaksi haetaan tietokannasta KAIKKIEN kenttien allamerkityt tiedot.
     if lentokone_di["type"] == "Mamma Birgitta 25":
         sql = (f"SELECT ident, name, type, iso_country, latitude_deg,"
@@ -105,7 +107,9 @@ def find_ports():
         sql = (
             "SELECT ident, name, type, iso_country, latitude_deg, longitude_deg "
             "FROM airport " 
-            "WHERE type='large_airport' OR type='medium_airport' "
+            "WHERE (type='large_airport' OR type='medium_airport') "
+            f"AND latitude_deg > {restricted_lat[0]} AND latitude_deg < {restricted_lat[1]}"
+            f"AND longitude_deg > {restricted_long[0]} AND latitude_deg < {restricted_long[1]}"
         )
     kursori.execute(sql)
     airports = kursori.fetchall()

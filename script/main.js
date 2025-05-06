@@ -84,12 +84,18 @@ async function findPorts(direction) {
   return response[0];
 }
 
+async function moveTo(ident) {
+  const destination = await fetch(
+    `http://localhost:3000/move-to/${player_name}/${ident}`
+  )
+}
+
 function markDestinationList(airports) {
   destinationList.innerHTML = '';
   console.log('destination list airports length', airports.length);
   for (let i = 0; i < airports.length; i++) {
     destinationList.innerHTML += 
-      `<li id="port-${i}"><div>${airports[i]["ident"]}</div> 
+      `<li id="port-${airports[i]["ident"]}"><div>${airports[i]["ident"]}</div> 
       <div id="airport-name">${airports[i]["name"]}</div></li>`
   }
 }
@@ -174,15 +180,15 @@ function refreshDestinationListener() {
   const list = document.querySelector('#destination-list');
   // lord help me
   document.querySelector('#destination-list').addEventListener('click', function(evt) {
+    let id = '';
     if (evt.target.id.startsWith('port')) {
-      const id = evt.target.id.split('-').pop();
-      console.log(id);
-      // move to HERE
-    } // else if (evt.target.parentElement.id.startsWith('port')) {
-      // const id = evt.target.parentElement.id.split('-').pop();
-      // console.log(id);
-      // move to HERE
-    //}
+      id = evt.target.id.split('-').pop();
+    } else if (evt.target.parentElement.id.startsWith('port')) {
+      id = evt.target.parentElement.id.split('-').pop();
+    }
+    console.log(id);
+    moveTo(id);
+
   });
 }
 
