@@ -186,7 +186,6 @@ button {
     background-color: #5a5c5e;
     border-radius: 10px;
 }
-.plane1:hover
 
 .plane2{
     margin: 5px 0 5px 0;
@@ -226,6 +225,8 @@ button {
     width: 0;
     overflow: hidden;
 }
+
+
 #close-event {
     text-align: right;
 }
@@ -242,3 +243,4 @@ button {
     border-radius: 10px;
     padding: 10px;
 }
+

@@ -13,6 +13,6 @@ yhteys = mysql.connector.connect(
 cursor = yhteys.cursor()
 
 cursor.execute(
-    "INSERT INTO player_stats (id, name, money, location, airplane)"
-    "VALUES (0, 'tester', 100000000, 'efhk', 2)"
+    "INSERT INTO player_stats (id, name, money, location, airplane, shifts)"
+    "VALUES (0, 'tester', 100000000, 'efhk', 1, 30)"
 )

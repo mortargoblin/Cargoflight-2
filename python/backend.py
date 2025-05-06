@@ -24,13 +24,50 @@ kursori = yhteys.cursor()
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:63342"])
 
+#This get new stats when you move around
+@app.route("/player_stats/<player>")
+def player_stats(player):
+    sql = (f"select name, money, airplane, location, shifts, type, distance "
+           f"from player_stats, airplane "
+           f"where player_stats.airplane=airplane.id and name='{player}'")
+    kursori.execute(sql)
+    data = kursori.fetchall()
+    for values in data:
+        if values[4] != 0:
+            name = {"name": values[0],
+                    "money": values[1],
+                    "airplane": values[2],
+                    "location": values[3],
+                    "shifts": values[4],
+                    "type": values[5],
+                    "distance": values[6]
+                    }
+            status = 200
+        else:
+            status = 200
+            name = {"text": "end"}
 
-@app.route("/create_new_game")
-def create_new_game():
+    return Response(response=json.dumps(name), status=status, mimetype="application/json")
+
+#This -1 you shifts
+@app.route("/shifts_remain/<player>")
+def shifts_remain(player):
+    player = "tester"
+    sql = (f"select shifts from player_stats where name='{player}'")
+    kursori.execute(sql)
+    pr_value = kursori.fetchone()[0]
+
+    kursori.execute( "UPDATE player_stats "
+        f"SET shifts = '{float(pr_value)-1}' "
+        f"WHERE name = '{player}' ")
+    return str(pr_value)
+
+@app.route("/create_new_game/<player>")
+def create_new_game(player):
     ## TEMPORARY PLANE MODEL
 
     # Ensimmäiseksi selvitetään lähtöpaikan sijainti
-    sql = (f"""INSERT INTO player_stats (name, money, airplane, location, shifts) VALUES ('joku', 200000, 1, 'EFHK', 30)"""
+    sql = (f"""INSERT INTO player_stats (name, money, airplane, location, shifts) VALUES ('{player}', 200000, 1, 'EFHK', 30)"""
            )
 
     kursori.execute(sql)
@@ -177,15 +214,15 @@ def find_ports():
 
 
 #upgrade plane
-@app.route("/upgrade_airplane/<selection>")
+@app.route("/upgrade_airplane/<selection>/<player>")
 #http://localhost:3000/upgrade_airplane_md?airplane_ar=${airplane_ar}&money=${money}&id=${plane}
-def upgrade_airplane(selection):
+def upgrade_airplane(selection, player):
 
     selected = float(selection)
 
     player_stats = ("select player_stats.money, airplane.type "
                     "from airplane, player_stats "
-                    "where airplane.id=player_stats.airplane and name='joku'")
+                    f"where airplane.id=player_stats.airplane and name='{player}'")
     kursori.execute(player_stats)
     stats = kursori.fetchall()
 
@@ -204,12 +241,12 @@ def upgrade_airplane(selection):
                 if planetype != value[0]:
                     new_stats = (f"UPDATE player_stats "
                                  f"SET money='{money-float(value[3])}', airplane='{selected}' "
-                                 f"WHERE name='joku'")
+                                 f"WHERE name='{player}'")
                     kursori.execute(new_stats)
 
 
                     status = 200
-                    message = {"text": "Upgrade has succeed", "money_remaining": money-float(value[3])}
+                    message = {"type": "Upgrade completed", "money_remaining": money-float(value[3])}
                 else:
                     status = 403
                     message = {"text": "You already have this plane.", "money_remaining": money}

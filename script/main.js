@@ -27,8 +27,38 @@ let nextLocationList = []
 let nextLocation = {}
 
 
-// EVENTS 
+// Show overlayed windows. events, menus, etc.
+function eventWindow(event) {
 
+  const element = document.querySelector('#event-container');
+  element.classList.remove('event-container-hidden');
+  document.querySelector('#map').style.display = 'none';
+  document.querySelector('#event').innerHTML = event;
+}
+
+function closeEventWindow() {
+
+  const element = document.querySelector('#event-container');
+  element.classList.add('event-container-hidden');
+  document.querySelector('#map').style.display = 'block';
+}
+
+/*
+function end_script(){
+
+  const element = document.querySelector('#event-container');
+  element.classList.add('end-container-hidden');
+  document.querySelector('#map').style.display = 'none';
+
+  const endWindow = document.querySelector('#end-window');
+  endWindow.innerHTML = `<h2>Game Over!</h2><p>Thanks for playing!</p>`;
+  endWindow.classList.add('active');
+  document.querySelector('#new-game').style.display = 'block';
+
+}
+*/
+
+// EVENTS
 const upgradeEvent = 
 `<h2>Upgrade your airplane</h2> <ol class="planes">
 <li class="plane1"><a>Name: Lilla Damen 22, Distance: 300, Selection: 4, Factor: 1, Price: 0 €</li>
@@ -39,13 +69,31 @@ const upgradeEvent =
 
 
 ////////////// FUNCTIONS
+//This will keep your score in time and check when the game end.
+
+
+async function player_stats(){
+  const data_get = await fetch(`http://localhost:3000/player_stats/${player_name}`)
+  const data = await data_get.json()
+  if (data['text']==='end'){
+    end_script()
+  } else{
+  console.log(data)
+}}
+
+//This -1 for your shifts
+async function shifts_gone(){
+  const shift = await  fetch(`http://localhost:3000/shifts_remain/${player_name}`)
+
+}
 
 async function upgrade_airplane_md(plane){
-  const data = await fetch(`http://localhost:3000/upgrade_airplane/${plane}`);
+  const data = await fetch(`http://localhost:3000/upgrade_airplane/${plane}/${player_name}`);
   const message = await data.json();
 
   console.log(message['text']);
   console.log(message['money_remaining']);
+
 }
 
 // findPorts function
@@ -70,6 +118,8 @@ async function moveTo(ident) {
   const destination = await fetch(
     `http://localhost:3000/move-to/${player_name}/${ident}`
   )
+  await shifts_gone()
+  await player_stats()
 }
 
 function markDestinationList(airports) {
@@ -90,21 +140,7 @@ function markMap(airports) {
   }
 }
 
-// Show overlayed windows. events, menus, etc.
-function eventWindow(event) {
 
-  const element = document.querySelector('#event-container');
-  element.classList.remove('event-container-hidden');
-  document.querySelector('#map').style.display = 'none';
-  document.querySelector('#event').innerHTML = event;
-}
-
-function closeEventWindow() {
-
-  const element = document.querySelector('#event-container');
-  element.classList.add('event-container-hidden');
-  document.querySelector('#map').style.display = 'block';
-}
 
 
 //////////// BUTTONS
@@ -178,5 +214,4 @@ function refreshDestinationListener() {
 
 document.addEventListener('keydown', async function(evt) {
   console.log(evt.key);
-  
 });
