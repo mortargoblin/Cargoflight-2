@@ -10,8 +10,7 @@ const closeEvent = document.querySelector('#close-event');
 const player_name = 'tester';
 
 let nextTurn = true;
-// TODO: move money to backend
-let money = 2000000;
+
 let currentLocation = {
   ident: "EFHK", 
   name: "Helsinki Vantaa Airport", 
@@ -23,13 +22,6 @@ let currentLocation = {
 let nextLocationList = []
 let nextLocation = {}
 
-let airplane_ar = [{
-  type: "Lilla Damen 22",
-  distance: 600,
-  factor: 1,
-  price: 0,
-  selection: 4
-}];
 
 // EVENTS 
 
@@ -45,27 +37,11 @@ const upgradeEvent =
 ////////////// FUNCTIONS
 
 async function upgrade_airplane_md(plane){
-  let airplaneArray = encodeURIComponent(JSON.stringify(airplane_ar))
+  const data = await fetch(`http://localhost:3000/upgrade_airplane/${plane}`);
+  const message = await data.json();
 
-  let test = await fetch(`http://localhost:3000/create_new_game`)
-  test = await test.json();
-
-
-
-  let airplane = await fetch(`http://localhost:3000/upgrade_airplane?airplane_ar=${airplaneArray}&money=${money}&id=${plane}`);
-  airplane = await airplane.json();
-  money = airplane['money_remaining']
-  airplane_ar =[{
-    type: airplane['airplane_data']['type'],
-    distance: airplane['airplane_data']['distance'],
-    factor: airplane['airplane_data']['factor'],
-    price: airplane['airplane_data']['price'],
-    selection: airplane['airplane_data']['selection']
-  }]
-  console.log(test)
-  console.log(airplane['text']);
-  console.log(airplane['airplane_data']);
-  console.log(airplane['money_remaining']);
+  console.log(message['text']);
+  console.log(message['money_remaining']);
 }
 
 // findPorts function

@@ -7,6 +7,7 @@ from flask_cors import CORS
 import random
 import json
 from geopy import distance
+from numpy.ma.core import masked_not_equal
 
 yhteys = mysql.connector.connect(
     host='127.0.0.1',
@@ -167,38 +168,56 @@ def find_ports():
 
 
 #upgrade plane
-@app.route("/upgrade_airplane")
+@app.route("/upgrade_airplane/<selection>")
 #http://localhost:3000/upgrade_airplane_md?airplane_ar=${airplane_ar}&money=${money}&id=${plane}
-def upgrade_airplane():
+def upgrade_airplane(selection):
 
-    value = float(request.args.get("id"))
-    money = float(request.args.get("money"))
+    selected = float(selection)
 
-    plane = request.args.get("airplane_ar", [])
-    plane_di = json.loads(plane)
+    player_stats = ("select player_stats.money, airplane.type "
+                    "from airplane, player_stats "
+                    "where airplane.id=player_stats.airplane and name='joku'")
+    kursori.execute(player_stats)
+    stats = kursori.fetchall()
 
-
-    sql = f"select type, distance, selection, price, factor from airplane where id = '{value}'"
-    kursori.execute(sql)
-    information = kursori.fetchall()
-
+    for stat in stats:
+        money = stat[0]
+        planetype = stat[1]
 
     try:
+        sql = ("select type, distance, selection, price, factor "
+               f"from airplane where id = '{selected}'")
+        kursori.execute(sql)
+        information = kursori.fetchall()
+
         for value in information:
             if money >= float(value[3]):
-                if plane_di[0]["type"] != value[0]:
-                    new_player_stats = f"INSERT INTO player_stats (money, airplane) VALUES ('{money-float(value[3])}', '{value}') WHERE id=1"
+                if planetype != value[0]:
+                    new_stats = (f"UPDATE player_stats "
+                                 f"SET money='{money-float(value[3])}', airplane='{selected}' "
+                                 f"WHERE name='joku'")
+                    kursori.execute(new_stats)
+
 
                     status = 200
                     message = {"text": "Upgrade has succeed", "money_remaining": money-float(value[3])}
+                else:
+                    status = 403
+                    message = {"text": "You already have this plane.", "money_remaining": money}
 
-    except IndexError:
-        status = 400
-        message = {"text": "You already have this type of plane or you don't have enough money",
-                   "money_remaining": money}
+            else:
+                status = 403
+                message = {"text": "You don't have enough money.", "money_remaining": money}
+
+    except ValueError as e:
+        message = {"text": str(e),
+                   "money_remaining": money
+                   }
 
     return Response(response=json.dumps(message), status=status, mimetype="application/json")
 
+
+#stat[0]
         #If you don't have enough money, or you already have this type of plane
 
 
