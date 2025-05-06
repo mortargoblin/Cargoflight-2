@@ -21,7 +21,6 @@ yhteys = mysql.connector.connect(
 kursori = yhteys.cursor()
 
 
-
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:63342"])
 

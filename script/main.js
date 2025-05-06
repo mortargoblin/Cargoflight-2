@@ -52,8 +52,7 @@ async function upgrade_airplane_md(plane){
 // update destination-list
 async function findPorts(direction) {
   const airports = await fetch(
-    `http://localhost:3000/find-ports?player=${player_name}
-    &direction=${direction}`
+    `http://localhost:3000/find-ports?player=${player_name}&direction=${direction}`
   );
   const response = await airports.json();
   console.log(response);
@@ -78,7 +77,7 @@ function markDestinationList(airports) {
   console.log('destination list airports length', airports.length);
   for (let i = 0; i < airports.length; i++) {
     destinationList.innerHTML += 
-      `<li id="port-${airports[i]["ident"]}"><div>${airports[i]["ident"]}</div> 
+      `<li id="port_${airports[i]["ident"]}"><div>${airports[i]["ident"]}</div> 
       <div id="airport-name">${airports[i]["name"]}</div></li>`
   }
 }
@@ -165,9 +164,9 @@ function refreshDestinationListener() {
   document.querySelector('#destination-list').addEventListener('click', function(evt) {
     let id = '';
     if (evt.target.id.startsWith('port')) {
-      id = evt.target.id.split('-').pop();
+      id = evt.target.id.split('_').pop();
     } else if (evt.target.parentElement.id.startsWith('port')) {
-      id = evt.target.parentElement.id.split('-').pop();
+      id = evt.target.parentElement.id.split('_').pop();
     }
     console.log(id);
     moveTo(id);
