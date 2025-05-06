@@ -1,3 +1,8 @@
+:root{
+    padding: 1rem 0 1rem 1rem:
+
+}
+
 
 body {
     padding: 0;
@@ -167,6 +172,8 @@ button {
 }
 
 #stats > h2 {
+    display: flex;
+    text-align: center;
     text-decoration: underline;
 }
 
@@ -176,6 +183,24 @@ button {
     text-align: center;
     padding-inline-start: 0;
 }
+
+#stats > li:hover{
+
+}
+
+.plane1{
+    padding: 1rem 0 1rem 1rem;
+}
+.plane2{
+    padding: 1rem 0 1rem 1rem;
+}
+.plane3{
+    padding: 1rem 0 1rem 1rem;
+}
+.plane4{
+    padding: 1rem 0 1rem 1rem;
+}
+
 
 #fuel {
     width: 100px;
