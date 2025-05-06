@@ -91,8 +91,11 @@ def find_ports():
         sql = (f"SELECT ident, name, type, iso_country, latitude_deg,"
                 " longitude_deg FROM airport WHERE type='large_airport'")
     else:
-        sql = (f"SELECT ident, name, type, iso_country, latitude_deg,"
-                " longitude_deg FROM airport WHERE NOT type='small_airport'")
+        sql = (
+            "SELECT ident, name, type, iso_country, latitude_deg, longitude_deg "
+            "FROM airport " 
+            "WHERE type='large_airport' OR type='medium_airport' "
+        )
     kursori.execute(sql)
     airports = kursori.fetchall()
 
