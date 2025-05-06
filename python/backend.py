@@ -8,6 +8,16 @@ import random
 import json
 from geopy import distance
 
+yhteys = mysql.connector.connect(
+    host='127.0.0.1',
+    port=3306,
+    database='Cargogame',
+    user='pythonuser',  # HUOM käyttäjä: pythonuser
+    password='salainen-sana',  # HUOM salasana
+    autocommit=True,
+    collation='utf8mb3_general_ci'
+)
+kursori = yhteys.cursor()
 
 
 
@@ -35,7 +45,22 @@ def create_new_game():
 
     kursori.execute(sql)
 
-
+@app.route('/move-to/<player>/<icao>')
+def move_to(player, icao):
+    sql = (
+        "UPDATE player_stats "
+        f"SET location = '{icao}' "
+        f"WHERE name = '{player}' "
+        )
+    kursori.execute(sql)
+    sql = (
+        "SELECT location "
+        "FROM player_stats "
+        f"WHERE name = '{player}' "
+    )
+    kursori.execute(sql)
+    response = kursori.fetchone()
+    return str(response[0])
 
 @app.route("/find-ports")
 def find_ports():
@@ -56,17 +81,6 @@ def find_ports():
     #lentokone_di = request.args["plane-model"]
     kant = lentokone_di["distance"]
     valvara = lentokone_di["selection"]
-
-    yhteys = mysql.connector.connect (
-        host='127.0.0.1',
-        port= 3306,
-        database='Cargogame',
-        user='pythonuser',  # HUOM käyttäjä: pythonuser
-        password='salainen-sana',  #HUOM salasana
-        autocommit=True,
-        collation='utf8mb3_general_ci'
-        )
-    kursori = yhteys.cursor()
 
     # Ensimmäiseksi selvitetään lähtöpaikan sijainti
     sql = f"SELECT latitude_deg, longitude_deg FROM airport where ident = '{sij}'"
