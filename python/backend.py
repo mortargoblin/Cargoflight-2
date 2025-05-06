@@ -34,27 +34,6 @@ def create_new_game():
            )
 
     kursori.execute(sql)
-    player_data = kursori.fetchall()
-
-
-    try:
-        for data in player_data:
-            data = {"this":{
-                "f": data[0],
-                "s": data[1],
-                "t": data[2],
-                "fo": data[3],
-                "fi": data[4],
-
-            }}
-            status = 200
-
-
-    except IndexError as e:
-        data = "juu"
-        status = 20
-
-        return Response(response=json.dumps(data), status=status, mimetype="application/json")
 
 
 
