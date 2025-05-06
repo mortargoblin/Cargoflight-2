@@ -28,16 +28,6 @@ CORS(app, origins=["http://localhost:63342"])
 @app.route("/create_new_game")
 def create_new_game():
     ## TEMPORARY PLANE MODEL
-    yhteys = mysql.connector.connect(
-        host='127.0.0.1',
-        port=3306,
-        database='Cargogame',
-        user='pythonuser',  # HUOM käyttäjä: pythonuser
-        password='salainen-sana',  # HUOM salasana
-        autocommit=True,
-        collation='utf8mb3_general_ci'
-    )
-    kursori = yhteys.cursor()
 
     # Ensimmäiseksi selvitetään lähtöpaikan sijainti
     sql = (f"""INSERT INTO player_stats (name, money, airplane, location, shifts) VALUES ('joku', 200000, 1, 'EFHK', 30)"""
@@ -186,18 +176,6 @@ def upgrade_airplane():
 
     plane = request.args.get("airplane_ar", [])
     plane_di = json.loads(plane)
-
-
-    yhteys = mysql.connector.connect(
-        host='127.0.0.1',
-        port=3306,
-        database='Cargogame',
-        user='pythonuser',  # HUOM käyttäjä: pythonuser
-        password='salainen-sana',  # HUOM salasana
-        autocommit=True,
-        collation='utf8mb3_general_ci'
-    )
-    kursori = yhteys.cursor()
 
 
     sql = f"select type, distance, selection, price, factor from airplane where id = '{value}'"
