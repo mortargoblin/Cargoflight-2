@@ -31,10 +31,10 @@ let nextLocation = {}
 
 const upgradeEvent = 
 `<h2>Upgrade your airplane</h2> <ol class="planes">
-<li class="plane1">Name: Lilla Damen 22, Distance: 300, Selection: 4, Factor: 1, Price: 0 €</li>
-<li class="plane2">Name: Stor Dam 23, Distance: 450, Selection: 5, Factor: 1.4, Price: 25 000 €</li>
-<li class="plane3">Name: Nanny 24, Distance: 600, Selection: 6, Factor: 1.6, Price: 60 000 €</li>
-<li class="plane4">Name: Mamma Birgitta 24, Distance: 1500, Selection: 7, Factor: 2, Price: 100 000 €</li>
+<li class="plane1"><a>Name: Lilla Damen 22, Distance: 300, Selection: 4, Factor: 1, Price: 0 €</li>
+<li class="plane2"><a>Name: Stor Dam 23, Distance: 450, Selection: 5, Factor: 1.4, Price: 25 000 €</li>
+<li class="plane3"><a>Name: Nanny 24, Distance: 600, Selection: 6, Factor: 1.6, Price: 60 000 €</li>
+<li class="plane4"><a>Name: Mamma Birgitta 24, Distance: 1500, Selection: 7, Factor: 2, Price: 100 000 €</li>
 </ol>`;
 
 
