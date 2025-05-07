@@ -114,10 +114,17 @@ def reward(tulos, sij_deg, player):
     if country in visited_ident:
         base_reward = base_reward / 2
 
+
+
     return (((base_reward * float(factor)) + etaisyys_raha)
             * random.uniform(0.9,1.1) * country_reward)
 
-
+@app.route("/add.money/<player>/<money>")
+def add_money(player, money):
+    sql = f"select money from player_stats where name='{player}'"
+    kursori.execute(sql)
+    oldmoney = kursori.fetchone()[0]
+    kursori.execute(f"UPDATE player_stats SET money='{float(oldmoney)+float(money)}'")
 @app.route("/create_new_game/<player>")
 def create_new_game(player):
     ## TEMPORARY PLANE MODEL

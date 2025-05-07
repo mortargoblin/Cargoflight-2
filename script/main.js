@@ -94,6 +94,11 @@ const upgradeEvent =
 
 ////////////// FUNCTIONS
 //This will keep your score in time and check when the game end.
+async function newmoney(response){
+  await fetch(`http://localhost:3000/add.money/${player_name}/${response['reward']}`)
+}
+
+
 function getList(evt) {
   const list = document.querySelector('#destination-list');
 
@@ -146,6 +151,7 @@ async function findPorts(direction) {
   if (response === 'Too few airports') {
     alert('Too few airports');
   } else {
+    await newmoney(response)
     await markDestinationList(response);
     await markMap(response);
     await refreshDestinationListener();
@@ -167,8 +173,9 @@ function markDestinationList(airports) {
   for (let i = 0; i < airports.length; i++) {
     destinationList.innerHTML += 
       `<li id="port_${airports[i]["ident"]}"><div>${airports[i]["ident"]}</div> 
-      <div id="airport-name">${airports[i]["name"]}</div></li>`
+      <div id="airport-name">${airports[i]["name"]}</div><div id="reward">${parseInt(airports[i]["reward"])}€</div></li>`
   }
+
 }
 
 async function rewardList(airports){
