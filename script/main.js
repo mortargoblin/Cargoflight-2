@@ -12,6 +12,7 @@ const player_name = 'tester';
 let nextTurn = true;
 
 player_stats()
+
 /*
 let currentLocation = {
   ident: "EFHK", 
@@ -145,7 +146,6 @@ async function findPorts(direction) {
   if (response === 'Too few airports') {
     alert('Too few airports');
   } else {
-    await rewardList(response);
     await markDestinationList(response);
     await markMap(response);
     await refreshDestinationListener();
@@ -171,8 +171,12 @@ function markDestinationList(airports) {
   }
 }
 
-function rewardList(airports){
-
+async function rewardList(airports){
+  console.log(airports)
+  const send = await fetch(
+    `http://localhost:3000/reward?player=${player_name}&direction=${direction}`
+  );
+  const response = await airports.json();
 }
 
 function markMap(airports) {
@@ -241,8 +245,8 @@ function refreshDestinationListener() {
   const list = document.querySelector('#destination-list')
   list.removeEventListener('click', getList, false);
   list.addEventListener('click', getList, false)
-
 }
+
 
 /////////// KEYBINDS
 

@@ -1,5 +1,5 @@
 # backend.py
-
+import geopy.distance
 from flask import Flask, request, Response
 import mysql.connector
 from flask_cors import CORS
@@ -71,13 +71,33 @@ def shifts_remain(player):
         f"WHERE name = '{player}' ")
     return str(pr_value)
 
-"""
-@app.route("/reward/<player>")
-def reward(player):
-  
+
+def reward(tulos, sij_deg, player):
+    sqlfact = (f"select factor from airplane, player_stats "
+               f"where player_stats.name='{player}' "
+               f"and player_stats.airplane=airplane.id")
+    kursori.execute(sqlfact)
+    factor = kursori.fetchone()[0]
+
+    sqlvisit = f"select ident from visited_country"
+    kursori.execute(sqlvisit)
+    visited_ident = kursori.fetchall()
+
+    etaisyys = distance.distance((sij_deg[0], sij_deg[1]), (tulos[4], tulos[5])).km
+    print(sij_deg[0])
+    print(sij_deg[1])
+    print(tulos[4])
+    print(tulos[5])
+    print(etaisyys)
+
     etaisyys_raha = etaisyys * 2
-    bonus = 0
     country_reward = 1
+    country = tulos[3]
+
+    if tulos[2] == "medium_airport":
+        base_reward = 2000
+    if tulos[2] == "large_airport":
+        base_reward = 3500
 
     match country:
         case "RU" | "BY":
@@ -91,12 +111,12 @@ def reward(player):
         case "DE" | "LU":
             country_reward = 1.2
 
-    if ident in visited_ident:
+    if country in visited_ident:
         base_reward = base_reward / 2
 
-    return (((base_reward * float(lentokone_di["kerroin"])) + etaisyys_raha)
+    return (((base_reward * float(factor)) + etaisyys_raha)
             * random.uniform(0.9,1.1) * country_reward)
-"""
+
 
 @app.route("/create_new_game/<player>")
 def create_new_game(player):
@@ -117,12 +137,21 @@ def move_to(player, icao):
         f"SET location = '{icao}' "
         f"WHERE name = '{player}' "
     )
+
+
+
     kursori.execute(
-        "SELECT location "
-        "FROM player_stats "
-        f"WHERE name = '{player}' "
+        "SELECT location, iso_country "
+        "FROM player_stats, airport "
+        f"WHERE ident=location and player_stats.name = '{player}' "
     )
     response = kursori.fetchone()
+
+
+    kursori.execute(f"INSERT INTO visited_country (ident) "
+                    f"VALUES ('{response[1]}')"
+                    )
+
     return str(response[0])
 
 #### FIND PORTS
@@ -154,9 +183,10 @@ def find_ports():
     valvara = lentokone_di["selection"]
 
     # Ensimmäiseksi selvitetään lähtöpaikan sijainti
-    sql = f"SELECT latitude_deg, longitude_deg FROM airport where ident = '{sij}'"
+    sql = f"SELECT latitude_deg, longitude_deg, iso_country FROM airport where ident = '{sij}'"
     kursori.execute(sql)
     sij_deg = kursori.fetchone()
+
     print("airport:", sij)
     print("coordinates:", sij_deg)
 
@@ -191,7 +221,7 @@ def find_ports():
         
         # if  
         if (
-            distance.distance(sij_deg, paamaara_deg).km < kant 
+            distance.distance((sij_deg[0], sij_deg[1]), paamaara_deg).km < kant
             and airport[0] != sij
         ):
             if suunta=="N": #north
@@ -225,9 +255,13 @@ def find_ports():
                 "iso_country": pool_current[3],
                 "lat": pool_current[4],
                 "long": pool_current[5],
+                "reward": reward(pool_current, sij_deg, player)
             })
-            
+
             status = 200
+
+
+
 
         except IndexError as ie:
             # Jos kenttiä ei ole riittävästi palautetaan False
@@ -241,7 +275,7 @@ def find_ports():
                 # verran, palautetaan vajaa lista. Näin valinnanvarasta ei
                 # tule debuffia.
                 pass
-            
+
     return Response(
         response=json.dumps(tulos),
         status=status,
