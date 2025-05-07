@@ -11,8 +11,7 @@ const player_name = 'tester';
 
 let nextTurn = true;
 
-// TODO: move money to backend
-let money = 2000000;
+
 /*
 let currentLocation = {
   ident: "EFHK", 
@@ -43,23 +42,46 @@ function closeEventWindow() {
   document.querySelector('#map').style.display = 'block';
 }
 
-/*
-function end_script(){
 
-  const element = document.querySelector('#event-container');
-  element.classList.add('end-container-hidden');
-  document.querySelector('#map').style.display = 'none';
-
+function end_script(money, name, shifts){
   const endWindow = document.querySelector('#end-window');
-  endWindow.innerHTML = `<h2>Game Over!</h2><p>Thanks for playing!</p>`;
-  endWindow.classList.add('active');
-  document.querySelector('#new-game').style.display = 'block';
+  endWindow.createElement('h2').innerHTML = 'Game Over!';
+  endWindow.createElement('p').innerHTML = 'Thanks for playing our game.'
+  const ul = endWindow.createElement('ul')
+  const h2 = ul.createElement('h2').innerHTML = 'There is your player stats.'
+  h2.createElement('p').innerHTML = `Company name: ${name}   Money get: ${money}     Shifts remain: ${shifts}`
 
+  document.querySelector('#end-window').overflow = 'visible'
+  document.querySelector('#event-container').overflow = 'hidden'
 }
-*/
+
+//This upgrade statswindow
+function statsWindow(money, name, airplane, shifts){
+  const add = document.querySelector('#stats-item')
+
+    add.innerHTML = ''
+
+    const namecont = document.createElement('li')
+    namecont.textContent = `Name: ${name}`
+
+    const moneycont = document.createElement('li')
+    moneycont.textContent = `Money: ${money}`
+
+    const airplanecont = document.createElement('li')
+    airplanecont.textContent = `Airplane: ${airplane}`
+
+    const shiftscont = document.createElement('li')
+    shiftscont.textContent = `Shifts remain: ${shifts}`
+
+    add.appendChild(namecont)
+    add.appendChild(moneycont)
+    add.appendChild(airplanecont)
+    add.appendChild(shiftscont)
+  }
+
 
 // EVENTS
-const upgradeEvent = 
+const upgradeEvent =
 `<h2>Upgrade your airplane</h2> <ol class="planes">
 <li class="plane1"><a>Name: Lilla Damen 22, Distance: 300, Selection: 4, Factor: 1, Price: 0 €</li>
 <li class="plane2"><a>Name: Stor Dam 23, Distance: 450, Selection: 5, Factor: 1.4, Price: 25 000 €</li>
@@ -75,16 +97,18 @@ const upgradeEvent =
 async function player_stats(){
   const data_get = await fetch(`http://localhost:3000/player_stats/${player_name}`)
   const data = await data_get.json()
-  if (data['text']==='end'){
-    end_script()
-  } else{
-  console.log(data)
-}}
+  if (data['status']==='end'){
+
+    end_script(data['money'], data['name'], data['type'], data['shifts'])
+  } else {
+    console.log(data)
+    statsWindow(data['money'], data['name'], data['type'], data['shifts'])
+  }}
+
 
 //This -1 for your shifts
 async function shifts_gone(){
   const shift = await  fetch(`http://localhost:3000/shifts_remain/${player_name}`)
-
 }
 
 async function upgrade_airplane_md(plane){
@@ -93,6 +117,8 @@ async function upgrade_airplane_md(plane){
 
   console.log(message['text']);
   console.log(message['money_remaining']);
+  closeEventWindow()
+  await player_stats()
 
 }
 

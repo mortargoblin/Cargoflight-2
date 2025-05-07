@@ -225,6 +225,11 @@ button {
     width: 0;
     overflow: hidden;
 }
+#end-window{
+    overflow: hidden;
+    width: 100%;
+    background-color: #5a5c5e;
+}
 
 
 #close-event {

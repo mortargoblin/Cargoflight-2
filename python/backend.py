@@ -40,12 +40,21 @@ def player_stats(player):
                     "location": values[3],
                     "shifts": values[4],
                     "type": values[5],
-                    "distance": values[6]
+                    "distance": values[6],
+                    "status": "ok"
                     }
             status = 200
         else:
             status = 200
-            name = {"text": "end"}
+            name = {"name": values[0],
+                    "money": values[1],
+                    "airplane": values[2],
+                    "location": values[3],
+                    "shifts": values[4],
+                    "type": values[5],
+                    "distance": values[6],
+                    "status": "end"
+                    }
 
     return Response(response=json.dumps(name), status=status, mimetype="application/json")
 
@@ -246,14 +255,14 @@ def upgrade_airplane(selection, player):
 
 
                     status = 200
-                    message = {"type": "Upgrade completed", "money_remaining": money-float(value[3])}
+                    message = {"text": "Upgrade succeed", "type": value[0], "money_remaining": money-float(value[3])}
                 else:
                     status = 403
-                    message = {"text": "You already have this plane.", "money_remaining": money}
+                    message = {"text": "You already have this plane","type": value[0], "money_remaining": money}
 
             else:
                 status = 403
-                message = {"text": "You don't have enough money.", "money_remaining": money}
+                message = {"text": "You don't have enough money.", "type": value[0],"money_remaining": money}
 
     except ValueError as e:
         message = {"text": str(e),
