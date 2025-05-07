@@ -11,7 +11,7 @@ const player_name = 'tester';
 
 let nextTurn = true;
 
-
+player_stats()
 /*
 let currentLocation = {
   ident: "EFHK", 
@@ -24,6 +24,7 @@ let currentLocation = {
 */
 let nextLocationList = []
 let nextLocation = {}
+
 
 
 // Show overlayed windows. events, menus, etc.
@@ -92,7 +93,18 @@ const upgradeEvent =
 
 ////////////// FUNCTIONS
 //This will keep your score in time and check when the game end.
+function getList(evt) {
+  const list = document.querySelector('#destination-list');
 
+  let id = '';
+  if (evt.target.id.startsWith('port')) {
+    id = evt.target.id.split('_').pop();
+  } else if (evt.target.parentElement.id.startsWith('port')) {
+    id = evt.target.parentElement.id.split('_').pop();
+  }
+  console.log(id);
+  moveTo(id);
+}
 
 async function player_stats(){
   const data_get = await fetch(`http://localhost:3000/player_stats/${player_name}`)
@@ -133,9 +145,10 @@ async function findPorts(direction) {
   if (response === 'Too few airports') {
     alert('Too few airports');
   } else {
-    markDestinationList(response);
-    markMap(response);
-    refreshDestinationListener();
+    await rewardList(response);
+    await markDestinationList(response);
+    await markMap(response);
+    await refreshDestinationListener();
   }
   return response[0];
 }
@@ -156,6 +169,10 @@ function markDestinationList(airports) {
       `<li id="port_${airports[i]["ident"]}"><div>${airports[i]["ident"]}</div> 
       <div id="airport-name">${airports[i]["name"]}</div></li>`
   }
+}
+
+function rewardList(airports){
+
 }
 
 function markMap(airports) {
@@ -221,19 +238,10 @@ document.querySelector('#south').addEventListener('click', function() {
 
 // Movement (via destination list)
 function refreshDestinationListener() {
-  const list = document.querySelector('#destination-list');
-  // lord help me
-  document.querySelector('#destination-list').addEventListener('click', function(evt) {
-    let id = '';
-    if (evt.target.id.startsWith('port')) {
-      id = evt.target.id.split('_').pop();
-    } else if (evt.target.parentElement.id.startsWith('port')) {
-      id = evt.target.parentElement.id.split('_').pop();
-    }
-    console.log(id);
-    moveTo(id);
+  const list = document.querySelector('#destination-list')
+  list.removeEventListener('click', getList, false);
+  list.addEventListener('click', getList, false)
 
-  });
 }
 
 /////////// KEYBINDS
