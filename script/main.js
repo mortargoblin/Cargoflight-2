@@ -233,14 +233,29 @@ console.log(evt)
     }
   }
 
-  function markMap(airports) {
-    for (let i = 0; i < airports.length; i++) {
-      L.marker([airports[i]["lat"], airports[i]["long"]]).
-          addTo(map).
-          bindPopup(airports[i]["name"]).
-          openPopup();
-    }
+
+currentMark()
+  function currentMark() {
+    const currentLayer = new L.LayerGroup()
+
+    currentMark = new L.marker([50, 50], {icon: redicon})
+    currentLayer.addLayer(currentMark)
+    map.addLayer(currentLayer)
   }
+  function markMap(airports) {
+
+      const destinationLayer = new L.LayerGroup()
+      //destinationLayer.clearLayers(destinationMark);
+      for (let i = 0; i < airports.length; i++) {
+          destinationMark = new L.marker([airports[i]["lat"], airports[i]["long"]], {icon: greenicon})
+          destinationLayer.addLayer(destinationMark)
+          map.addLayer(destinationLayer)
+          destinationMark.bindPopup(airports[i]["name"])
+          console.log(airports.length)
+      }
+  }
+
+
 
 //////////// BUTTONS
 

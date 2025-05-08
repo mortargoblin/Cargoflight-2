@@ -17,3 +17,16 @@ const stadia_bg = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_b
 stadia_bg.addTo(map)
 
 
+// icon
+
+const redicon = L.icon({
+	iconUrl: 'img/redicon.png',
+	iconSize: [40, 40],
+
+});
+
+const greenicon = L.icon({
+	iconUrl: 'img/greenicon2.png',
+	iconSize: [40, 40],
+
+});
