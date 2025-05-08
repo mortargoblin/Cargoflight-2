@@ -291,6 +291,13 @@ def find_ports():
 
 
 #upgrade plane
+@app.route("/currentLocation/<player>")
+def currentLocation(player):
+
+    sql = f"select latitude_deg, longitude_deg from airport, player_stats where player_stats.location=airport.ident and player_stats.name = '{player}'"
+    kursori.execute(sql)
+    currentloc = kursori.fetchone()
+    return currentloc
 @app.route("/upgrade_airplane/<selection>/<player>")
 #http://localhost:3000/upgrade_airplane_md?airplane_ar=${airplane_ar}&money=${money}&id=${plane}
 def upgrade_airplane(selection, player):

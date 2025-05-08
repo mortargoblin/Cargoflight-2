@@ -233,19 +233,30 @@ console.log(evt)
     }
   }
 
+  async function currentLocation() {
+    const currentLoc = await fetch(`http://localhost:3000/currentLocation/${player_name}`)
+    const Location = await currentLoc.json();
+    console.log(Location)
+      return Location;
 
-currentMark()
+  }
+  //currentLocation();
+/*currentMark(Location)
   function currentMark() {
     const currentLayer = new L.LayerGroup()
 
-    currentMark = new L.marker([50, 50], {icon: redicon})
+    currentMark = new L.marker([Location], {icon: redicon})
     currentLayer.addLayer(currentMark)
     map.addLayer(currentLayer)
-  }
+  }*/
   function markMap(airports) {
 
       const destinationLayer = new L.LayerGroup()
-      //destinationLayer.clearLayers(destinationMark);
+      const old = document.querySelectorAll(".leaflet-marker-icon");
+      console.log(old)
+      old.forEach(function(mark){
+          mark.remove()
+      });
       for (let i = 0; i < airports.length; i++) {
           destinationMark = new L.marker([airports[i]["lat"], airports[i]["long"]], {icon: greenicon})
           destinationLayer.addLayer(destinationMark)
