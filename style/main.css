@@ -16,10 +16,14 @@ body {
 }
 
 button {
+    background-color: #aeaeae;
     border-radius: 40%;
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 100px;
     border: outset 13px grey;
+}
+button:hover{
+    background-color: #474747;
 }
 
 .ridged {
@@ -141,6 +145,7 @@ button {
 #middle {
     flex-grow: 1;
 }
+
 #map {
     width: 100%;
     height: calc(100% - 40px);
@@ -155,7 +160,7 @@ button {
     width: 400px;
     flex-shrink: 0;
     text-align: center;
-    margin: 0px 10px;
+    margin: 10px;
 }
 #img-container {
     background-color: #0e0e12;
@@ -261,42 +266,45 @@ button {
 }
 
 #end > h1{
-    display: block;
+    font-size: 2rem;
+    border-radius: 10px;
+    display: table;
     text-decoration: none;
     text-align: center;
-    background-color: #5a5c5e;
-    margin: 6rem 7rem 6rem 7rem;
+    background-color: #171717;
+    margin: 3rem auto 3rem auto;
+    padding: 1rem;
 
 }
 
 #end > h2{
-    display: block;
+    margin: 2rem auto 2rem auto;
+    display: table;
     text-align: center;
-    color: orange;
+    text-decoration: underline;
+    background-color: #5a5c5e;
+    border-radius: 10px;
+    padding: 1rem;
 }
 
 #end > li{
-    display: block;
+    display: table;
+    border-radius: 10px;
+    padding: 13px 6px 13px 6px;
+    font-size: 1rem;
     text-align: center;
     background-color: #5a5c5e;
-    color: orange;
     margin: 1rem auto 1rem auto;
 }
 
-#end > button{
-    text-align: center;
-}
+
 
 #restart-button{
-    font-size: 14px;
-    border-radius: 40%;
-    width: 200px;
-    height: 80px;
-    border: outset 13px grey;
+    display: table;
+    margin: 2rem auto 2rem auto;
 }
-
 
 #restart-button:hover{
     background-color: #939393;
-    color: #5a5c5e
+    color: #070707
 }

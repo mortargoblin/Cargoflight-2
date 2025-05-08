@@ -60,7 +60,7 @@ async function end_script(money, name, type, shifts, location) {
 <h1 class="end_title">GAME OVER!   SHIFTS REMAIN ${shifts}</h1>
 <h2 class="end2_title">Here is your companys ${name} stats: </h2>
 <li class="end_stats"><a>Money got: ${money}</a></li>
-<li class="end_stats"><a>Plane typy at the end: ${type}</a></li>
+<li class="end_stats"><a>Plane type at the end: ${type}</a></li>
 <li class="end_stats"><a>Last location: ${location}</a></li>
 <button id="restart-button">Restart Game</button>
 </div>`
