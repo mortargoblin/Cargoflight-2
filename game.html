@@ -33,14 +33,7 @@
       <div class="top-item">
         <h2> <span id="companyName">Company Name</span></h2>
 
-        <script>
-          window.onload = () => {
-            const name = localStorage.getItem('playerName');
-            if (name) {
-              document.getElementById('companyName').innerText = name;
-            }
-          };
-        </script>
+
       </div>
     </div>
     <div class="flex-container">
@@ -71,8 +64,7 @@
         </div>
         <div id="buttons">
           <button id="upgrade">upgrade</button>
-          <button>something</button>
-          <button id="back">Back</button>
+          <button id="new-company">New Company</button>
         </div>
         <div id="fuel" class="ridged">gauge</div>
       </div>

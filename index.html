@@ -27,36 +27,6 @@
     <img src="img/cargo.png" alt="Contours" class="outline-image" />
     <a style="font-size: 100px" href="game.html" id="startLink" class="center-link">START</a>
 
-    <script>
-        document.getElementById('startLink').addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const name = prompt("Enter your name:");
-
-            localStorage.setItem('playerName', name);
-
-            if (name) {
-                fetch('http://localhost:3000/save_name', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name: name })
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    window.location.href = 'game.html';
-                })
-                .catch(error => {
-                    console.error('Error saving name:', error);
-                    alert("Could not save name.");
-                });
-            } else {
-                alert("Name is required to start the game.");
-            }
-        });
-    </script>
   </div>
 </body>
 

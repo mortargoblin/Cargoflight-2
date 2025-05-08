@@ -7,7 +7,6 @@ from flask_cors import CORS
 import random
 import json
 from geopy import distance
-from matplotlib.font_manager import json_dump
 from numpy.ma.core import masked_not_equal
 
 yhteys = mysql.connector.connect(

@@ -7,13 +7,15 @@ const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
 const closeEvent = document.querySelector('#close-event');
 
-const player_name = `jj`;
+const player_name = `tester`;
 
 let nextTurn = true;
 
+
+
 //Do not remove that array
-let airport_data = []
-player_stats()
+let airport_data = [];
+player_stats();
 
 /*
 let currentLocation = {
@@ -116,7 +118,32 @@ const upgradeEvent =
 
 
 ////////////// FUNCTIONS
-//This will keep your score in time and check when the game end.
+async function createCompany() {
+  const name = prompt("Enter your name:");
+
+//  localStorage.setItem('playerName', name);
+
+  if (name) {
+      fetch('http://localhost:3000/save_name', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name: name })
+      })
+      .then(response => response.text())
+      .catch(error => {
+          console.error('Error saving name:', error);
+          alert("Could not save name.");
+      });
+  } else {
+      alert("Name is required to start the game.");
+  }
+  return name;
+}
+
+
+
 async function newmoney(money) {
   money = parseInt(money["reward"])
   console.log(money)
@@ -125,8 +152,8 @@ async function newmoney(money) {
 
 
 
-  function getList(evt) {
-  console.log(evt)
+function getList(evt) {
+console.log(evt)
 
     let id = '';
     if (evt.target.id.startsWith('port')) {
@@ -225,7 +252,13 @@ async function newmoney(money) {
 
 //////////// BUTTONS
 
-  upgradeButton.addEventListener('click', function(evt) {
+document.querySelector('#new-company').addEventListener('click', function(){
+  player_name = newCompany();
+  document.querySelector('#companyName').textContent = player_name;
+});
+
+
+upgradeButton.addEventListener('click', function(evt) {
     eventWindow(upgradeEvent);
 
     const planeitem = document.querySelectorAll('#event-window .planes li')
