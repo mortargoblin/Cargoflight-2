@@ -162,39 +162,43 @@ def move_to(player, icao):
 def find_ports():
 
     ## TEMPORARY PLANE MODEL
-    lentokone_di = {
-        "type": "Lilla Damen 22",
-        "distance": 800,
-        "factor": 1,
-        "price": 0,
-        "selection": 4
-    }
 
     player = request.args["player"]
 
-    kursori.execute(
+    sql = (f"select type, distance, factor, price, selection "
+           f"from airplane, player_stats "
+           f"where player_stats.name='{player}' "
+           f"and player_stats.airplane=airplane.id")
+    kursori.execute(sql)
+    lentokone_di = kursori.fetchone()
+    print(lentokone_di)
+
+    sql2 = (
         "SELECT location FROM player_stats "
         f"WHERE name = '{player}'"
     )
-
+    kursori.execute(sql2)
     sij = kursori.fetchone()[0]
+    print(sij)
+    print(sij)
     
     suunta = request.args["direction"]
     
     #lentokone_di = request.args["plane-model"]
-    kant = lentokone_di["distance"]
-    valvara = lentokone_di["selection"]
+    kant = float(lentokone_di[1])
+    valvara = float(lentokone_di[4])
 
     # Ensimmäiseksi selvitetään lähtöpaikan sijainti
     sql = f"SELECT latitude_deg, longitude_deg, iso_country FROM airport where ident = '{sij}'"
     kursori.execute(sql)
     sij_deg = kursori.fetchone()
+    print(sij_deg)
 
     print("airport:", sij)
     print("coordinates:", sij_deg)
 
     # km to lat/long degrees
-    kant_restriction = kant / 90
+    kant_restriction = float(kant) / 90
     print("restriction (deg):", kant_restriction)
 
     # location limiter
@@ -202,7 +206,7 @@ def find_ports():
     restricted_long = (sij_deg[1] - kant_restriction, sij_deg[1] + kant_restriction)
 
     # Seuraavaksi haetaan tietokannasta KAIKKIEN kenttien allamerkityt tiedot.
-    if lentokone_di["type"] == "Mamma Birgitta 25":
+    if lentokone_di[0] == "Mamma Birgitta 25":
         sql = (f"SELECT ident, name, type, iso_country, latitude_deg,"
                 " longitude_deg FROM airport WHERE type='large_airport'")
     else:
