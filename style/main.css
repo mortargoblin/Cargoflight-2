@@ -11,6 +11,10 @@ body {
     background: linear-gradient(90deg,rgba(20, 20, 20, 1) 0%, rgba(48, 48, 48, 1) 32%, rgba(144, 149, 163, 1) 51%, rgba(31, 31, 33, 1) 67%, rgba(18, 18, 18, 1) 100%);
 }
 
+#game-container{
+    display: block;
+}
+
 button {
     border-radius: 40%;
     width: 80px;
@@ -256,3 +260,6 @@ button {
     padding: 10px;
 }
 
+#restart-button:hover{
+    background-color: #001f3f;
+}

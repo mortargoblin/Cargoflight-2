@@ -7,7 +7,7 @@ const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
 const closeEvent = document.querySelector('#close-event');
 
-const player_name = 'Cargogame';
+const player_name = `jj`;
 
 let nextTurn = true;
 
@@ -28,6 +28,12 @@ let currentLocation = {
 let nextLocationList = []
 let nextLocation = {}
 
+async function find_name(){
+  const response = await fetch(`http://localhost:3000/get_name`)
+  const name = await response.json()
+  console.log(name)
+}
+
 
 
 // Show overlayed windows. events, menus, etc.
@@ -47,16 +53,23 @@ function closeEventWindow() {
 }
 
 
-function end_script(money, name, shifts){
-  const endWindow = document.querySelector('#end-window');
-  endWindow.createElement('h2').innerHTML = 'Game Over!';
-  endWindow.createElement('p').innerHTML = 'Thanks for playing our game.'
-  const ul = endWindow.createElement('ul')
-  const h2 = ul.createElement('h2').innerHTML = 'There is your player stats.'
-  h2.createElement('p').innerHTML = `Company name: ${name}   Money get: ${money}     Shifts remain: ${shifts}`
+async function end_script(money, name, type, shifts, location) {
+  const endscreen = `<div id="end">
+<h1 class="end_title">GAME OVER!   SHIFTS REMAIN ${shifts}</h1>
+<h2 class="end2_title">Here is your companys ${name} stats: </h2>
+<li class="end_stats"><a>Money got: ${money}</a></li>
+<li class="end_stats"><a>Plane typy at the end: ${type}</a></li>
+<li class="end_stats"><a>Last location: ${location}</a></li>
+<button id="restart-button">Restart Game</button>
+</div>`
 
-  document.querySelector('#end-window').overflow = 'visible'
-  document.querySelector('#event-container').overflow = 'hidden'
+  const endWindow = document.querySelector('#game-container');
+  endWindow.innerHTML = endscreen
+
+  document.querySelector('#restart-button').addEventListener('click', () => {
+    restartGame()
+  })
+
 }
 
 //This upgrade statswindow
@@ -64,14 +77,7 @@ function statsWindow(money, name, airplane, shifts, location){
 
 
     const add = document.querySelector('#stats-item')
-/*
-     const h2 = document.querySelector('#stats')
-    const coname = document.createElement('h2')
-    coname.classList.add('stats_title')
-    coname.textContent = `Company "${name}"  stats:`
 
-
- */
     add.innerHTML = ''
 
     const namecont = document.createElement('li')
@@ -272,9 +278,20 @@ async function newmoney(money) {
     list.addEventListener('click', getList, false)
   }
 
+async function restartGame() {
+  try {
+    const response = await fetch(`http://localhost:3000/delete_rows`)
+    if (response.ok) {
+      alert('Game restarted')
+      window.location.href = 'index.html'
+    } else {
+      alert('Fail when trying to open game')
+    }
+  } catch (error) {
+    console.error('Error:', error)
 
-
-
+  }
+}
 
 
 /////////// KEYBINDS

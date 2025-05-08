@@ -7,6 +7,7 @@ from flask_cors import CORS
 import random
 import json
 from geopy import distance
+from matplotlib.font_manager import json_dump
 from numpy.ma.core import masked_not_equal
 
 yhteys = mysql.connector.connect(
@@ -23,6 +24,8 @@ kursori = yhteys.cursor()
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:63342"])
+
+
 
 #This get new stats when you move around
 @app.route("/player_stats/<player>")
@@ -128,16 +131,6 @@ def add_money(player, money):
     kursori.execute(f"UPDATE player_stats SET money='{float(oldmoney)+int(money)}'")
 
 ##Create new game and clear previous agme stats
-@app.route("/create_new_game/<player>")
-def create_new_game(player):
-    ## TEMPORARY PLANE MODEL
-    sql = (f"")
-
-    # Ensimmäiseksi selvitetään lähtöpaikan sijainti
-    sql = (f"""INSERT INTO player_stats (name, money, airplane, location, shifts) VALUES ('{player}', 200000, 1, 'EFHK', 30)"""
-           )
-
-    kursori.execute(sql)
 
 ##### MOVE TO
 @app.route('/move-to/<player>/<icao>')
@@ -179,7 +172,7 @@ def find_ports():
     }
 
     player = request.args["player"]
-    
+
     kursori.execute(
         "SELECT location FROM player_stats "
         f"WHERE name = '{player}'"
