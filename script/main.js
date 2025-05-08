@@ -227,8 +227,6 @@ async function newmoney(money) {
           const planenumber = 4
           upgrade_airplane_md(planenumber)
         }
-
-        /*const planenumber = item.className*/
       })
     })
   });

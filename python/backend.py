@@ -58,7 +58,7 @@ def player_stats(player):
 
     return Response(response=json.dumps(name), status=status, mimetype="application/json")
 
-#This -1 you shifts
+#This minus one from your shifts
 @app.route("/shifts_remain/<player>")
 def shifts_remain(player):
     sql = (f"select shifts from player_stats where name='{player}'")
@@ -70,7 +70,7 @@ def shifts_remain(player):
         f"WHERE name = '{player}' ")
     return str(pr_value)
 
-
+#This calculate reward for each airport which findports shows
 def reward(tulos, sij_deg, player):
     sqlfact = (f"select factor from airplane, player_stats "
                f"where player_stats.name='{player}' "
@@ -127,10 +127,11 @@ def add_money(player, money):
     print(oldmoney)
     kursori.execute(f"UPDATE player_stats SET money='{float(oldmoney)+int(money)}'")
 
-
+##Create new game and clear previous agme stats
 @app.route("/create_new_game/<player>")
 def create_new_game(player):
     ## TEMPORARY PLANE MODEL
+    sql = (f"")
 
     # Ensimmäiseksi selvitetään lähtöpaikan sijainti
     sql = (f"""INSERT INTO player_stats (name, money, airplane, location, shifts) VALUES ('{player}', 200000, 1, 'EFHK', 30)"""
