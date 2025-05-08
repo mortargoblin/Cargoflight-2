@@ -326,6 +326,7 @@ def upgrade_airplane(selection, player):
                     kursori.execute(new_stats)
 
 
+
                     status = 200
                     message = {"text": "Upgrade succeed", "type": value[0], "money_remaining": money-float(value[3])}
                 else:
@@ -343,9 +344,26 @@ def upgrade_airplane(selection, player):
 
     return Response(response=json.dumps(message), status=status, mimetype="application/json")
 
+@app.route('/save_name', methods=['POST'])
+def save_name():
+    data = request.get_json()
+    name = data.get('name')
 
+    if not name:
+        return "Name is missing", 400
 
+    try:
+        # Luo käyttäjän
+        kursori.execute('''
+               INSERT INTO player_stats (name, money, airplane, location, shifts)
+                VALUES (%s, %s, %s, %s, %s)
+             ''', (name, 200000, 1, 'EFHK', 30))
 
+        yhteys.commit()
+        return f"Thanks {name}, your game has started!", 200
+
+    except mysql.connector.Error as err:
+        return f"Database error: {err}", 500
 
 
 if __name__ == "__main__":

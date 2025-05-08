@@ -17,6 +17,7 @@
 </head>
 
 <body>
+  
 <div id="end-window" class="end-layer"></div>
   <div id="event-container" class="event-container-hidden end-container-hidden"  aria-hidden="true">
     <div id="event-window">
@@ -31,7 +32,16 @@
         <h1>Cargo Flight 2</h1>
       </div>
       <div class="top-item">
-        <h1 id="company-name">company name</h1>
+        <h2> <span id="companyName">Company Name</span></h2>
+
+        <script>
+          window.onload = () => {
+            const name = localStorage.getItem('playerName');
+            if (name) {
+              document.getElementById('companyName').innerText = name;
+            }
+          };
+        </script>
       </div>
     </div>
     <div class="flex-container">

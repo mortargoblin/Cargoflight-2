@@ -51,11 +51,13 @@ button {
     width: 400px;
     height: 37px;
     margin: 3px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .top-item > h1 {
-  margin: 0px;
-  margin-top: 5px;
-  font-size: 25px;
+    margin: 0;
+    font-size: 25px;
 }
 
 /*This is the left side of the game*/
