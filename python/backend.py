@@ -358,5 +358,13 @@ def save_name():
         return f"Database error: {err}", 500
 
 
+#This will delete previous values
+@app.route("/delete_rows")
+def deleterows():
+    kursori.execute(f"DELETE from player_stats")
+    kursori.execute('DELETE from visited_country')
+    return 'Deleted'
+
+
 if __name__ == "__main__":
     app.run(use_reloader=True, host="127.0.0.1", port=3000)
