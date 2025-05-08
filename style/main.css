@@ -56,8 +56,9 @@ button {
     justify-content: center;
 }
 .top-item > h1 {
-    margin: 0;
-    font-size: 25px;
+  margin: 0px;
+  margin-top: 5px;
+  font-size: 25px;
 }
 
 /*This is the left side of the game*/
@@ -170,43 +171,45 @@ button {
 }
 
 #stats > h2 {
-    display: flex;
+    display: block;
     text-align: center;
     text-decoration: underline;
 }
 
 #stats > ul {
+
     display: block;
     list-style: none;
     text-align: center;
     padding-inline-start: 0;
 }
 
-.plane1{
-    margin: 5px 0 5px 0;
+.upgrade_title{
+    text-align: center;
+}
+
+.upgrade_title:hover{
+
+}
+
+.planes{
+    padding: 0 10px 0 10px;
+}
+
+.planes > li{
+    list-style: none;
+    cursor: pointer;
+    margin: 2rem 0 2rem 0;
     padding: 1rem 0 1rem 1rem;
     background-color: #5a5c5e;
     border-radius: 10px;
 }
 
-.plane2{
-    margin: 5px 0 5px 0;
-    padding: 1rem 0 1rem 1rem;
-    background-color: #5a5c5e;
-    border-radius: 10px;
+.planes > li:hover{
+    background-color: #939393;
+    color: #5a5c5e;
 }
-.plane3{
-    margin: 5px 0 5px 0;
-    padding: 1rem 0 1rem 1rem;
-    background-color: #5a5c5e;
-    border-radius: 10px;
-}
-.plane4{
-    margin: 5px 0 5px 0;
-    padding: 1rem 0 1rem 1rem;
-    background-color: #5a5c5e;
-    border-radius: 10px;
-}
+
 
 
 #fuel {
@@ -222,6 +225,7 @@ button {
     left: 0;
     width: 100%;
 }
+
 .event-container-hidden {
     height: 0;
     width: 0;
@@ -240,6 +244,7 @@ button {
 #close-event:hover {
     cursor: pointer;
 }
+
 #event-window {
     background-color: #0e0e12;
     margin: auto;

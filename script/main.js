@@ -7,7 +7,7 @@ const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
 const closeEvent = document.querySelector('#close-event');
 
-const player_name = 'tester';
+const player_name = 'Cargogame';
 
 let nextTurn = true;
 
@@ -60,13 +60,22 @@ function end_script(money, name, shifts){
 }
 
 //This upgrade statswindow
-function statsWindow(money, name, airplane, shifts){
-  const add = document.querySelector('#stats-item')
+function statsWindow(money, name, airplane, shifts, location){
 
+
+    const add = document.querySelector('#stats-item')
+/*
+     const h2 = document.querySelector('#stats')
+    const coname = document.createElement('h2')
+    coname.classList.add('stats_title')
+    coname.textContent = `Company "${name}"  stats:`
+
+
+ */
     add.innerHTML = ''
 
     const namecont = document.createElement('li')
-    namecont.textContent = `Name: ${name}`
+    namecont.textContent = `Location: ${location}`
 
     const moneycont = document.createElement('li')
     moneycont.textContent = `Money: ${money}`
@@ -76,7 +85,13 @@ function statsWindow(money, name, airplane, shifts){
 
     const shiftscont = document.createElement('li')
     shiftscont.textContent = `Shifts remain: ${shifts}`
+/*
+    company.appendChild(title)
+    h2.appendChild(coname)
+    h2.appendChild(add)
 
+
+ */
     add.appendChild(namecont)
     add.appendChild(moneycont)
     add.appendChild(airplanecont)
@@ -86,7 +101,7 @@ function statsWindow(money, name, airplane, shifts){
 
 // EVENTS
 const upgradeEvent =
-`<h2>Upgrade your airplane</h2> <ol class="planes">
+`<h2 class="upgrade_title">Upgrade your airplane</h2> <ol class="planes">
 <li class="plane1"><a>Name: Lilla Damen 22, Distance: 300, Selection: 4, Factor: 1, Price: 0 €</li>
 <li class="plane2"><a>Name: Stor Dam 23, Distance: 450, Selection: 5, Factor: 1.4, Price: 25 000 €</li>
 <li class="plane3"><a>Name: Nanny 24, Distance: 600, Selection: 6, Factor: 1.6, Price: 60 000 €</li>
@@ -127,10 +142,10 @@ async function newmoney(money) {
     const data = await data_get.json()
     if (data['status'] === 'end') {
 
-      end_script(data['money'], data['name'], data['type'], data['shifts'])
+      end_script(data['money'], data['name'], data['type'], data['shifts'], data['location'])
     } else {
       console.log(data)
-      statsWindow(data['money'], data['name'], data['type'], data['shifts'])
+      statsWindow(data['money'], data['name'], data['type'], data['shifts'], data['location'])
     }
   }
 
