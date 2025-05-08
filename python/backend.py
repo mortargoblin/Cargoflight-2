@@ -353,7 +353,7 @@ def save_name():
         kursori.execute('''
                INSERT INTO player_stats (name, money, airplane, location, shifts)
                 VALUES (%s, %s, %s, %s, %s)
-             ''', (name, 200000, 1, 'EFHK', 30))
+             ''', (name, 10000, 1, 'EFHK', 30))
 
         yhteys.commit()
         return f"Thanks {name}, your game has started!", 200
