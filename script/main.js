@@ -93,13 +93,7 @@ function statsWindow(money, name, airplane, shifts, location){
 
     const shiftscont = document.createElement('li')
     shiftscont.textContent = `Shifts remain: ${shifts}`
-/*
-    company.appendChild(title)
-    h2.appendChild(coname)
-    h2.appendChild(add)
 
-
- */
     add.appendChild(namecont)
     add.appendChild(moneycont)
     add.appendChild(airplanecont)
