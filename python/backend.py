@@ -61,7 +61,6 @@ def player_stats(player):
 #This -1 you shifts
 @app.route("/shifts_remain/<player>")
 def shifts_remain(player):
-    player = "tester"
     sql = (f"select shifts from player_stats where name='{player}'")
     kursori.execute(sql)
     pr_value = kursori.fetchone()[0]
@@ -119,12 +118,16 @@ def reward(tulos, sij_deg, player):
     return (((base_reward * float(factor)) + etaisyys_raha)
             * random.uniform(0.9,1.1) * country_reward)
 
-@app.route("/add.money/<player>/<money>")
+@app.route("/add_money/<player>/<money>")
 def add_money(player, money):
+
     sql = f"select money from player_stats where name='{player}'"
     kursori.execute(sql)
     oldmoney = kursori.fetchone()[0]
-    kursori.execute(f"UPDATE player_stats SET money='{float(oldmoney)+float(money)}'")
+    print(oldmoney)
+    kursori.execute(f"UPDATE player_stats SET money='{float(oldmoney)+int(money)}'")
+
+
 @app.route("/create_new_game/<player>")
 def create_new_game(player):
     ## TEMPORARY PLANE MODEL
@@ -339,9 +342,6 @@ def upgrade_airplane(selection, player):
 
     return Response(response=json.dumps(message), status=status, mimetype="application/json")
 
-
-#stat[0]
-        #If you don't have enough money, or you already have this type of plane
 
 
 

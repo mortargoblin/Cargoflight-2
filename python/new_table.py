@@ -12,4 +12,4 @@ yhteys = mysql.connector.connect(
 )
 cursor = yhteys.cursor()
 
-cursor.execute("create table visited_country (id int primary key, ident varchar(11))")
+cursor.execute("create table visited_country (id int auto_increment primary key, ident varchar(11))")
