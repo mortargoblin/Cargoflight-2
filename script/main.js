@@ -7,7 +7,7 @@ const destinationList = document.querySelector('#destination-list');
 const backButton = document.querySelector('#back');
 const closeEvent = document.querySelector('#close-event');
 
-const player_name = `tester`;
+let player_name = `tester`;
 
 let nextTurn = true;
 
@@ -118,13 +118,12 @@ const upgradeEvent =
 
 
 ////////////// FUNCTIONS
-async function createCompany() {
-  const name = prompt("Enter your name:");
+async function createCompany(name) {
 
 //  localStorage.setItem('playerName', name);
 
   if (name) {
-      fetch('http://localhost:3000/save_name', {
+      await fetch('http://localhost:3000/save_name', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -139,7 +138,6 @@ async function createCompany() {
   } else {
       alert("Name is required to start the game.");
   }
-  return name;
 }
 
 
@@ -253,7 +251,8 @@ console.log(evt)
 //////////// BUTTONS
 
 document.querySelector('#new-company').addEventListener('click', function(){
-  player_name = newCompany();
+  player_name = prompt('Enter company name')
+  createCompany(player_name);
   document.querySelector('#companyName').textContent = player_name;
 });
 
